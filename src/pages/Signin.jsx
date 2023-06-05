@@ -1,10 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import AuthImage from '../images/auth-image.jpg';
 import AuthDecoration from '../images/auth-decoration.png';
+import MetamaskIcon from '../images/metamask.png';
+import { useConnect, useDisconnect, useAccount } from 'wagmi';
+
+const signinInit = {
+  type: '0',
+  email: '',
+  password: '',
+};
 
 function Signin() {
+  /* Router */
+  /* State */
+  const [signinInfo, setSigninInfo] = useState(signinInit);
+  const { connect, connectors, isLoading, pendingConnector } = useConnect();
+  const { disconnect } = useDisconnect();
+  const { isConnected, address } = useAccount();
+
+  /* Hooks */
+  /* Functions */
+
+  const handleMetamask = (e) => {
+    e.preventDefault();
+    connect({ connector: connectors[0] });
+  };
+
+  const handleDisconnect = (e) => {
+    console.log('Connect ?');
+    console.log(isConnected);
+
+    console.log('Address');
+    console.log(address);
+
+    e.preventDefault();
+    disconnect();
+  };
+  /* Render */
   return (
     <main className="bg-white">
       <div className="relative md:flex">
@@ -59,10 +93,10 @@ function Signin() {
 
             <div className="max-w-sm mx-auto px-4 py-8">
               <h1 className="text-3xl text-slate-800 font-bold mb-6">
-                Welcome back! ✨
+                환영합니다! ✨
               </h1>
               {/* Form */}
-              <form>
+              <form action={signinInfo.type === '0' ? '' : ''} method="post">
                 <div className="sm:flex space-y-3 sm:space-y-0 sm:space-x-4 mb-8">
                   <label className="flex-1 relative block cursor-pointer">
                     <input
@@ -70,40 +104,6 @@ function Signin() {
                       name="radio-buttons"
                       className="peer sr-only"
                       defaultChecked
-                    />
-                    <div className="h-full text-center bg-white px-4 py-6 rounded border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out">
-                      <svg
-                        className="inline-flex w-10 h-10 shrink-0 fill-current mb-2"
-                        viewBox="0 0 40 40"
-                      >
-                        <circle
-                          className="text-indigo-100"
-                          cx="20"
-                          cy="20"
-                          r="20"
-                        />
-                        <path
-                          className="text-indigo-500"
-                          d="m26.371 23.749-3.742-1.5a1 1 0 0 1-.629-.926v-.878A3.982 3.982 0 0 0 24 17v-1.828A4.087 4.087 0 0 0 20 11a4.087 4.087 0 0 0-4 4.172V17a3.982 3.982 0 0 0 2 3.445v.878a1 1 0 0 1-.629.928l-3.742 1.5a1 1 0 0 0-.629.926V27a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.323a1 1 0 0 0-.629-.928Z"
-                        />
-                      </svg>
-                      <div className="font-medium text-slate-800 mb-1">
-                        Individual
-                      </div>
-                      <div className="text-sm">
-                        Lorem ipsum is place text commonly used.
-                      </div>
-                    </div>
-                    <div
-                      className="absolute inset-0 border-2 border-transparent peer-checked:border-indigo-400 rounded pointer-events-none"
-                      aria-hidden="true"
-                    ></div>
-                  </label>
-                  <label className="flex-1 relative block cursor-pointer">
-                    <input
-                      type="radio"
-                      name="radio-buttons"
-                      className="peer sr-only"
                     />
                     <div className="h-full text-center bg-white px-4 py-6 rounded border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out">
                       <svg
@@ -136,11 +136,41 @@ function Signin() {
                         />
                       </svg>
                       <div className="font-medium text-slate-800 mb-1">
-                        Organization
+                        입주민
                       </div>
-                      <div className="text-sm">
-                        Lorem ipsum is place text commonly used.
+                      <div className="text-sm">세대 거주 사용자 로그인</div>
+                    </div>
+                    <div
+                      className="absolute inset-0 border-2 border-transparent peer-checked:border-indigo-400 rounded pointer-events-none"
+                      aria-hidden="true"
+                    ></div>
+                  </label>
+                  <label className="flex-1 relative block cursor-pointer">
+                    <input
+                      type="radio"
+                      name="radio-buttons"
+                      className="peer sr-only"
+                    />
+                    <div className="h-full text-center bg-white px-4 py-6 rounded border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out">
+                      <svg
+                        className="inline-flex w-10 h-10 shrink-0 fill-current mb-2"
+                        viewBox="0 0 40 40"
+                      >
+                        <circle
+                          className="text-indigo-100"
+                          cx="20"
+                          cy="20"
+                          r="20"
+                        />
+                        <path
+                          className="text-indigo-500"
+                          d="m26.371 23.749-3.742-1.5a1 1 0 0 1-.629-.926v-.878A3.982 3.982 0 0 0 24 17v-1.828A4.087 4.087 0 0 0 20 11a4.087 4.087 0 0 0-4 4.172V17a3.982 3.982 0 0 0 2 3.445v.878a1 1 0 0 1-.629.928l-3.742 1.5a1 1 0 0 0-.629.926V27a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.323a1 1 0 0 0-.629-.928Z"
+                        />
+                      </svg>
+                      <div className="font-medium text-slate-800 mb-1">
+                        관리인
                       </div>
+                      <div className="text-sm">건물 및 시설 관리자 로그인</div>
                     </div>
                     <div
                       className="absolute inset-0 border-2 border-transparent peer-checked:border-indigo-400 rounded pointer-events-none"
@@ -183,42 +213,34 @@ function Signin() {
                       className="text-sm underline hover:no-underline"
                       to="/reset-password"
                     >
-                      Forgot Password?
+                      비밀번호 찾기
                     </Link>
                   </div>
                   <Link
                     className="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-3"
-                    to="/"
+                    onClick={handleDisconnect}
                   >
-                    Sign In
+                    로그인
                   </Link>
                 </div>
               </form>
               {/* Footer */}
               <div className="pt-5 mt-6 border-t border-slate-200">
+                <Link
+                  className="w-11/12 btn bg-indigo-500 hover:bg-indigo-600 text-white mx-3 mb-5"
+                  onClick={handleMetamask}
+                >
+                  <img src={MetamaskIcon} className="w-6 mr-5" alt="img" />
+                  MetaMask로 로그인
+                </Link>
                 <div className="text-sm">
-                  Don’t you have an account?{' '}
+                  41Room의 회원이 아니신가요?{'  '}
                   <Link
                     className="font-medium text-indigo-500 hover:text-indigo-600"
                     to="/signup"
                   >
-                    Sign Up
+                    회원가입
                   </Link>
-                </div>
-                {/* Warning */}
-                <div className="mt-5">
-                  <div className="bg-amber-100 text-amber-600 px-3 py-2 rounded">
-                    <svg
-                      className="inline w-3 h-3 shrink-0 fill-current mr-2"
-                      viewBox="0 0 12 12"
-                    >
-                      <path d="M10.28 1.28L3.989 7.575 1.695 5.28A1 1 0 00.28 6.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28 1.28z" />
-                    </svg>
-                    <span className="text-sm">
-                      To support you during the pandemic super pro features are
-                      free until March 31st.
-                    </span>
-                  </div>
                 </div>
               </div>
             </div>
