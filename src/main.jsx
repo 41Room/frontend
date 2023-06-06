@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router } from 'react-router-dom';
 import App from './App';
+import SessionManager from './utils/SessionManager';
 import './global';
 
 import { infuraProvider } from 'wagmi/providers/infura';
@@ -33,10 +34,12 @@ const config = createConfig({
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   // <React.StrictMode>
-  <WagmiConfig config={config}>
-    <Router>
-      <App />
-    </Router>
-  </WagmiConfig>
+  <Router>
+    <SessionManager>
+      <WagmiConfig config={config}>
+        <App />
+      </WagmiConfig>
+    </SessionManager>
+  </Router>
   // </React.StrictMode>
 );
