@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import AuthImage from '../../images/auth-image.jpg';
@@ -8,14 +8,58 @@ import SignupType from './SignupType';
 import SignupForm from './SignupForm';
 import SignupResult from './SignupResult';
 
+/* 
+  Type : 일반 사용자 / 관리인 구분
+  Step : 0-Signup 1-SignupForm 2-SignupResult */
+const StepInit = {
+  type: 0,
+  step: 0,
+};
+
+// 회원가입 정보
+const SignupInit = {
+  type: '',
+  check: false,
+  email: '',
+  name: '',
+  pwd: '',
+  buildingId: '',
+  dong: '',
+  ho: '',
+};
+
 function Signup() {
   /* Router */
+
   /* State */
   // 로그인 진행과정
-  const [check, setCheck] = useState(0);
+  const [signupStep, setSignupStep] = useState(StepInit);
+  const [signupInfo, setSignupInfo] = useState(SignupInit);
+
+  // State 관리 수정필요함
+  // Main -> Form -> Result
+  const signupValue = {
+    signupStep,
+    setSignupStep,
+    signupInfo,
+    setSignupInfo,
+  };
 
   /* Hooks */
+  useEffect(() => {
+    return;
+  }, [signupStep]);
+
   /* Functions */
+  const nextStep = () => {
+    setSignupStep({ ...signupStep, step: signupStep.step + 1 });
+  };
+
+  const backStep = () => {
+    setSignupStep({ ...signupStep, step: signupStep.step - 1 });
+  };
+  const functions = { nextStep, backStep };
+
   /* Render */
   return (
     <main className="bg-white">
@@ -70,9 +114,15 @@ function Signup() {
             </div>
 
             {/* 여기서 다름 */}
-            <SignupType />
-            {/* <SignupForm /> */}
-            {/* <SignupResult /> */}
+            {signupStep.step === 0 && (
+              <SignupType signupValue={signupValue} functions={functions} />
+            )}
+            {signupStep.step === 1 && (
+              <SignupForm signupValue={signupValue} functions={functions} />
+            )}
+            {signupStep.step === 2 && (
+              <SignupResult signupValue={signupValue} />
+            )}
           </div>
         </div>
 
