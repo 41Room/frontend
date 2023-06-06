@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 import AuthImage from '../images/auth-image.jpg';
 import AuthDecoration from '../images/auth-decoration.png';
 import MetamaskIcon from '../images/metamask.png';
 import { useConnect, useDisconnect, useAccount } from 'wagmi';
+import AuthApi from '../api/module/AuthAPI';
+import { useSession } from '../utils/SessionManager';
 
 const signinInit = {
   type: '0',
@@ -15,13 +17,46 @@ const signinInit = {
 function Signin() {
   /* Router */
   /* State */
+  const navigate = useNavigate();
+  const { isSession, handleSession } = useSession();
   const [signinInfo, setSigninInfo] = useState(signinInit);
   const { connect, connectors, isLoading, pendingConnector } = useConnect();
   const { disconnect } = useDisconnect();
   const { isConnected, address } = useAccount();
 
   /* Hooks */
+  useEffect(() => {
+    if (isSession) {
+      navigate('/');
+      return;
+    }
+  }, [isSession]);
+
   /* Functions */
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    switch (signinInfo.type) {
+      case '1':
+        console.log('관리인');
+        return;
+      default:
+        const tenantInfo = {
+          tenant_login_id: signinInfo.email,
+          tenant_login_pw: signinInfo.password,
+        };
+        const result = await AuthApi.tenantSignin(tenantInfo);
+        if (result) {
+          handleSession({ ...result, user_nm: result.tenant_nm });
+          navigate('/');
+          return true;
+        }
+        return false;
+    }
+  };
+
+  const handleSigninInfo = (e) => {
+    setSigninInfo({ ...signinInfo, [e.target.name]: e.target.value });
+  };
 
   const handleMetamask = (e) => {
     e.preventDefault();
@@ -38,6 +73,7 @@ function Signin() {
     e.preventDefault();
     disconnect();
   };
+
   /* Render */
   return (
     <main className="bg-white">
@@ -96,7 +132,11 @@ function Signin() {
                 환영합니다! ✨
               </h1>
               {/* Form */}
-              <form action={signinInfo.type === '0' ? '' : ''} method="post">
+              <form
+                action={signinInfo.type === '0' ? '' : ''}
+                method="post"
+                onSubmit={handleSubmit}
+              >
                 <div className="sm:flex space-y-3 sm:space-y-0 sm:space-x-4 mb-8">
                   <label className="flex-1 relative block cursor-pointer">
                     <input
@@ -190,6 +230,9 @@ function Signin() {
                       id="email"
                       className="form-input w-full"
                       type="email"
+                      name="email"
+                      value={signinInfo.email}
+                      onChange={handleSigninInfo}
                     />
                   </div>
                   <div>
@@ -204,6 +247,9 @@ function Signin() {
                       className="form-input w-full"
                       type="password"
                       autoComplete="on"
+                      name="password"
+                      value={signinInfo.password}
+                      onChange={handleSigninInfo}
                     />
                   </div>
                 </div>
@@ -216,12 +262,13 @@ function Signin() {
                       비밀번호 찾기
                     </Link>
                   </div>
-                  <Link
+                  <button
                     className="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-3"
-                    onClick={handleDisconnect}
+                    // onClick={handleDisconnect}
+                    type="submit"
                   >
                     로그인
-                  </Link>
+                  </button>
                 </div>
               </form>
               {/* Footer */}
