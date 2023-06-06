@@ -2,8 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router } from 'react-router-dom';
 import App from './App';
-
-const { VITE_API_KEY } = import.meta.env;
+import './global';
 
 import { infuraProvider } from 'wagmi/providers/infura';
 import { publicProvider } from 'wagmi/providers/public';
@@ -15,10 +14,11 @@ import {
   mainnet,
   sepolia,
 } from 'wagmi';
+import { API_KEY } from './utils';
 
 const { chains, publicClient } = configureChains(
   [mainnet, sepolia],
-  [infuraProvider({ apiKey: VITE_API_KEY }), publicProvider()]
+  [infuraProvider({ apiKey: API_KEY }), publicProvider()]
 );
 
 const connector = new MetaMaskConnector({
