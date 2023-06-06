@@ -32,11 +32,11 @@ const config = createConfig({
 });
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <WagmiConfig config={config}>
-      <Router>
-        <App />
-      </Router>
-    </WagmiConfig>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <WagmiConfig config={config}>
+    <Router>
+      <App />
+    </Router>
+  </WagmiConfig>
+  // </React.StrictMode>
 );

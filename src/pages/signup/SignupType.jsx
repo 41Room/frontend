@@ -1,19 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import AuthImage from '../../images/auth-image.jpg';
-import AuthDecoration from '../../images/auth-decoration.png';
-
-const SinupInit = {
-  type: '1',
-};
-
-function SignupType() {
+function SignupType(props) {
   /* State */
-  const [sinupInfo, setSignupInfo] = useState();
+  const { signupValue, functions } = props;
+  const { signupStep, setSignupStep, signupInfo, setSignupInfo } = signupValue;
+  const { nextStep, backStep } = functions;
 
   /* Hooks */
+  useEffect(() => {
+    return;
+  }, []);
+
   /* Functions */
+  const checkEssential = () => {
+    let value = false;
+
+    signupInfo.check ? nextStep() : alert('필수 항목을 체크하세요.');
+
+    return;
+  };
+
+  const handleType = (e) => {
+    let typevalue = -1;
+
+    e.target.id === 'manager' ? (typevalue = 1) : (typevalue = 0);
+
+    setSignupInfo({ ...signupInfo, type: typevalue });
+  };
+
+  const handleCheck = () => {
+    setSignupInfo({ ...signupInfo, check: !signupInfo.check });
+  };
+
   /* Render */
   return (
     <div className="max-w-sm mx-auto px-4 py-8">
@@ -23,11 +42,13 @@ function SignupType() {
       {/* Form */}
       <form>
         <div className="sm:flex space-y-3 sm:space-y-0 sm:space-x-4 mb-8">
-          <label className="flex-1 relative block cursor-pointer">
+          <label className="flex-1 relative block cursor-pointer" id="user">
             <input
               type="radio"
               name="radio-buttons"
+              id="user"
               className="peer sr-only"
+              onClick={handleType}
               defaultChecked
             />
             <div className="h-full text-center bg-white px-4 py-6 rounded border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out">
@@ -58,8 +79,14 @@ function SignupType() {
               aria-hidden="true"
             ></div>
           </label>
-          <label className="flex-1 relative block cursor-pointer">
-            <input type="radio" name="radio-buttons" className="peer sr-only" />
+          <label className="flex-1 relative block cursor-pointer" id="manager">
+            <input
+              type="radio"
+              name="radio-buttons"
+              id="manager"
+              onClick={handleType}
+              className="peer sr-only"
+            />
             <div className="h-full text-center bg-white px-4 py-6 rounded border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out">
               <svg
                 className="inline-flex w-10 h-10 shrink-0 fill-current mb-2"
@@ -92,7 +119,12 @@ function SignupType() {
           </div>
           <div className="flex items-center">
             <div className="form-switch">
-              <input type="checkbox" id="switch" className="sr-only" />
+              <input
+                type="checkbox"
+                id="switch"
+                className="sr-only"
+                onClick={handleCheck}
+              />
               <label className="bg-slate-400" htmlFor="switch">
                 <span className="bg-white shadow-sm" aria-hidden="true"></span>
                 <span className="sr-only">Switch label</span>
@@ -101,15 +133,12 @@ function SignupType() {
           </div>
         </div>
         <div className="flex items-center justify-between">
-          <Link
-            className="text-sm underline hover:no-underline"
-            to="/onboarding-01"
-          >
+          <Link className="text-sm underline hover:no-underline" to="/">
             &lt; 뒤로가기
           </Link>
           <Link
             className="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-auto"
-            to="/SignupType"
+            onClick={checkEssential}
           >
             계속 진행 &gt;
           </Link>
