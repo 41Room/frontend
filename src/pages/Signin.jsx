@@ -7,6 +7,7 @@ import MetamaskIcon from '../images/metamask.png';
 import { useConnect, useDisconnect, useAccount } from 'wagmi';
 import AuthApi from '../api/module/AuthAPI';
 import { useSession } from '../utils/SessionManager';
+import { useLoading } from '../hooks/useLoading';
 
 const signinInit = {
   type: '0',
@@ -21,16 +22,8 @@ function Signin() {
   const { isSession, handleSession } = useSession();
   const [signinInfo, setSigninInfo] = useState(signinInit);
   const { connect, connectors, isLoading, pendingConnector } = useConnect();
-  const { disconnect } = useDisconnect();
   const { isConnected, address } = useAccount();
-
-  /* Hooks */
-  useEffect(() => {
-    if (isSession) {
-      navigate('/');
-      return;
-    }
-  }, [isSession]);
+  const { handleLoadingTimer } = useLoading();
 
   /* Functions */
 
@@ -44,10 +37,12 @@ function Signin() {
           tenant_login_id: signinInfo.email,
           tenant_login_pw: signinInfo.password,
         };
-        const tenantResult = await AuthApi.tenantSignin(tenantInfo);
-        if (tenantResult) {
-          handleSession({ ...tenantResult, user_nm: tenantResult.tenant_nm });
-          navigate('/');
+        const result = await AuthApi.tenantSignin(tenantInfo);
+        if (result) {
+          handleLoadingTimer(2000, () => {
+            handleSession({ ...result, user_nm: result.tenant_nm });
+            navigate('/');
+          });
           return true;
         }
         return false;
@@ -61,9 +56,7 @@ function Signin() {
         if (agentResult) {
           handleSession({ ...agentResult, user_nm: agentResult.agent_nm });
           navigate('/');
-          return true;
         }
-        return false;
     }
   };
 
@@ -83,17 +76,39 @@ function Signin() {
     connect({ connector: connectors[0] });
   };
 
-  // MetaMask 로그아웃
-  const handleDisconnect = (e) => {
-    console.log('Connect ?');
-    console.log(isConnected);
+  /**
+   * 메타마스크로 로그인
+   * --
+   * @param {*} wallet_id
+   * @returns
+   */
+  const handleAddressLogin = async (wallet_id) => {
+    const result = await AuthApi.tenantSignin({ wallet_id });
+    if (result) {
+      handleLoadingTimer(3000, () => {
+        handleSession({ ...result, user_nm: result.tenant_nm });
+        navigate('/');
+      });
 
-    console.log('Address');
-    console.log(address);
-
-    e.preventDefault();
-    disconnect();
+      return true;
+    }
+    return false;
   };
+
+  /* Hooks */
+  useEffect(() => {
+    if (isSession) {
+      navigate('/');
+      return;
+    }
+  }, [isSession]);
+
+  useEffect(() => {
+    if (!isConnected) {
+      return;
+    }
+    handleAddressLogin(address);
+  }, [isConnected]);
 
   /* Render */
   return (

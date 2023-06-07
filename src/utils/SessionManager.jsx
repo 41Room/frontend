@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { checkSession, getCookie, logout, setCookie } from '.';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useAccount, useConnect, useDisconnect } from 'wagmi';
 
 const SessionContext = createContext(null);
 
@@ -18,6 +19,9 @@ const SessionManager = ({ children }) => {
   /* State */
   const [isSession, setIsSession] = useState(false);
   const [session, setSession] = useState(null);
+  const { isConnected, address } = useAccount();
+  const { disconnect } = useDisconnect();
+
   /* Functions */
   const handleSession = (val) => {
     try {
@@ -35,6 +39,10 @@ const SessionManager = ({ children }) => {
 
   const handleLogout = () => {
     logout();
+    if (isConnected) {
+      disconnect();
+    }
+
     location.reload();
   };
 
@@ -51,6 +59,10 @@ const SessionManager = ({ children }) => {
     const sess = JSON.parse(getCookie('41ROOM'));
     handleSession(sess);
   }, [session]);
+
+  useEffect(() => {
+    console.log(address);
+  }, [isConnected]);
 
   /* Render */
   return (
