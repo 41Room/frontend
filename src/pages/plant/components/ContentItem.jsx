@@ -1,18 +1,41 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import Star from '../../../components/Star';
+import { toolongText } from '../../../utils/Utils';
 
 function ContentItem(props) {
   /* Router */
+  const navigate = useNavigate();
 
   /* State */
-  const { imgSrc, plantName, plantDesc, plantFee, star = 0, btnText } = props;
+  const {
+    imgSrc,
+    plantId = '',
+    plantName,
+    plantDesc,
+    plantFee,
+    star = 0,
+    btnText = '예약',
+  } = props;
 
   /* Hooks */
 
   /* Functions */
+  const handleDetail = (e) => {
+    e.preventDefault();
+    if (plantId === '') {
+      return;
+    } else {
+      navigate('/plant/' + plantId);
+    }
+  };
 
   /* Render */
   return (
-    <div className="col-span-full sm:col-span-6 xl:col-span-3 bg-white shadow-lg rounded-sm border border-slate-200 overflow-hidden">
+    <div
+      className="col-span-full sm:col-span-6 xl:col-span-3 bg-white shadow-lg rounded-sm border border-slate-200 overflow-hidden"
+      onClick={handleDetail}
+    >
       <div className="flex flex-col h-full">
         {/* Image */}
         <div className="relative">
@@ -22,6 +45,11 @@ function ContentItem(props) {
             width="286"
             height="160"
             alt="img"
+            style={{
+              width: '348px',
+              height: '200px',
+              objectFit: 'scale-down',
+            }}
           />
         </div>
         {/* Card Content */}
@@ -33,86 +61,14 @@ function ContentItem(props) {
               <h3 className="text-lg text-slate-800 font-semibold mb-1">
                 {plantName}
               </h3>
-              <div className="text-sm">{plantDesc}</div>
+              <div className="text-sm">{toolongText(plantDesc, 150)}</div>
             </header>
             {/* Rating and Price */}
             <div className="flex flex-wrap items-center justify-between mb-5">
               {/* Rating */}
               <div className="flex items-center space-x-2 mr-2">
                 {/* Star */}
-                <div className="flex items-center space-x-2 mr-2">
-                  <div className="flex space-x-1">
-                    <button>
-                      <span className="sr-only">1 star</span>
-                      <svg
-                        className={
-                          star >= 1
-                            ? 'w-4 h-4 fill-current text-amber-500'
-                            : 'w-4 h-4 fill-current text-slate-300'
-                        }
-                        viewBox="0 0 16 16"
-                      >
-                        <path d="M10 5.934L8 0 6 5.934H0l4.89 3.954L2.968 16 8 12.223 13.032 16 11.11 9.888 16 5.934z" />
-                      </svg>
-                    </button>
-                    <button>
-                      <span className="sr-only">2 stars</span>
-                      <svg
-                        className={
-                          star >= 2
-                            ? 'w-4 h-4 fill-current text-amber-500'
-                            : 'w-4 h-4 fill-current text-slate-300'
-                        }
-                        viewBox="0 0 16 16"
-                      >
-                        <path d="M10 5.934L8 0 6 5.934H0l4.89 3.954L2.968 16 8 12.223 13.032 16 11.11 9.888 16 5.934z" />
-                      </svg>
-                    </button>
-                    <button>
-                      <span className="sr-only">3 stars</span>
-                      <svg
-                        className={
-                          star >= 3
-                            ? 'w-4 h-4 fill-current text-amber-500'
-                            : 'w-4 h-4 fill-current text-slate-300'
-                        }
-                        viewBox="0 0 16 16"
-                      >
-                        <path d="M10 5.934L8 0 6 5.934H0l4.89 3.954L2.968 16 8 12.223 13.032 16 11.11 9.888 16 5.934z" />
-                      </svg>
-                    </button>
-                    <button>
-                      <span className="sr-only">4 stars</span>
-                      <svg
-                        className={
-                          star >= 4
-                            ? 'w-4 h-4 fill-current text-amber-500'
-                            : 'w-4 h-4 fill-current text-slate-300'
-                        }
-                        viewBox="0 0 16 16"
-                      >
-                        <path d="M10 5.934L8 0 6 5.934H0l4.89 3.954L2.968 16 8 12.223 13.032 16 11.11 9.888 16 5.934z" />
-                      </svg>
-                    </button>
-                    <button>
-                      <span className="sr-only">5 stars</span>
-                      <svg
-                        className={
-                          star >= 5
-                            ? 'w-4 h-4 fill-current text-amber-500'
-                            : 'w-4 h-4 fill-current text-slate-300'
-                        }
-                        viewBox="0 0 16 16"
-                      >
-                        <path d="M10 5.934L8 0 6 5.934H0l4.89 3.954L2.968 16 8 12.223 13.032 16 11.11 9.888 16 5.934z" />
-                      </svg>
-                    </button>
-                  </div>
-                  {/* Rate */}
-                  <div className="inline-flex text-sm font-medium text-amber-600">
-                    {star}
-                  </div>
-                </div>
+                <Star star={star} />
               </div>
               {/* Price */}
               <div className="flex items-center space-x-2">

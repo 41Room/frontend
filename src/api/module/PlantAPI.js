@@ -23,6 +23,8 @@ const PlantAPI = {
     }
   },
   /**
+   *
+   *
    * 시설 목록 조회
    * --
    * @param {*} building_id
@@ -34,6 +36,7 @@ const PlantAPI = {
         ':building_id',
         building_id
       );
+
       const result = await $http.get(url);
       const { status, message, data } = result;
       if (status === 200) {

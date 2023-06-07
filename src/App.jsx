@@ -38,11 +38,13 @@ function App() {
     <Routes>
       <Route exact path="/" element={<Welcome />} />
       <Route path="/dashboard" element={<MainDashboard />} />
-      <Route path="/plant" element={<PlantMain />} />
-      <Route path="/plantregister" element={<PlantRegister />} />
-      <Route path="/plantdetail" element={<PlantDetail />} />
+      <Route path="/plant">
+        <Route index element={<PlantMain />} />
+        <Route path=":plant_id" element={<PlantDetail />} />
+        <Route path="register" element={<PlantRegister />} />
+        <Route path="review/:plant_id" element={<PlantReview />} />
+      </Route>
       <Route path="/plantcomplaints" element={<PlantComplaints />} />
-      <Route path="/plantreview" element={<PlantReview />} />
       <Route path="/signin" element={<Signin />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/community" element={<CommunityMain />} />

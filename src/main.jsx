@@ -11,6 +11,7 @@ import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 import { WagmiConfig, createConfig, configureChains, sepolia } from 'wagmi';
 import { API_KEY } from './utils';
 import LoadingManager from './hooks/useLoading';
+import PlantManager from './utils/PlantManager';
 
 const { chains, publicClient } = configureChains(
   [sepolia],
@@ -33,7 +34,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <WagmiConfig config={config}>
       <LoadingManager>
         <SessionManager>
-          <App />
+          <PlantManager>
+            <App />
+          </PlantManager>
         </SessionManager>
       </LoadingManager>
     </WagmiConfig>

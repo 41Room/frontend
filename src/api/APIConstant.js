@@ -62,7 +62,7 @@ const PLANT_API = {
    * @method GET
    * @param {string} building_id
    */
-  GET_PLANT_LIST: `${BASE_URL}/plant/:building_id`,
+  GET_PLANT_LIST: `${BASE_URL}/plant/list/:building_id`,
   /**
    * @method GET
    * @param {string} plant_id
