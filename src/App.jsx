@@ -9,6 +9,7 @@ import pages from './pages';
 import plant from './pages/plant';
 import community from './pages/community';
 import financial from './pages/financial';
+import { useLoading } from './hooks/useLoading';
 
 // Import pages
 const { Signin, Signup, MainDashboard, Welcome, PageNotFound } = pages;
@@ -24,11 +25,13 @@ const {
 
 function App() {
   const location = useLocation();
+  const { handleLoadingTimer } = useLoading();
 
   useEffect(() => {
     document.querySelector('html').style.scrollBehavior = 'auto';
     window.scroll({ top: 0 });
     document.querySelector('html').style.scrollBehavior = '';
+    handleLoadingTimer(1500);
   }, [location.pathname]); // triggered on route change
 
   return (
