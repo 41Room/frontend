@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { checkSession, getCookie, logout, setCookie } from '.';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
 
 const SessionContext = createContext(null);
@@ -47,12 +47,14 @@ const SessionManager = ({ children }) => {
   };
 
   /* Hooks */
+
   useEffect(() => {
     if (session) {
       return;
     }
     if (!checkSession()) {
-      navigate('/signin');
+      // 회원가입 화면전환 필요함
+      // navigate('/signin');
     }
     const sess = JSON.parse(getCookie('41ROOM'));
     handleSession(sess);

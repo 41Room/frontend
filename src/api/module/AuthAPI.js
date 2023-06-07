@@ -41,6 +41,7 @@ const AuthApi = {
       throw e;
     }
   },
+
   /**
    * 세대 회원가입
    * --

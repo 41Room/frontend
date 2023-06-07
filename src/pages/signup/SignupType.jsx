@@ -4,8 +4,9 @@ import { Link } from 'react-router-dom';
 function SignupType(props) {
   /* State */
   const { signupValue, functions } = props;
-  const { signupStep, setSignupStep, signupInfo, setSignupInfo } = signupValue;
-  const { nextStep, backStep } = functions;
+  const { signupInfo, setSignupInfo } = signupValue;
+
+  const { nextStep } = functions;
 
   /* Hooks */
   useEffect(() => {
@@ -13,18 +14,15 @@ function SignupType(props) {
   }, []);
 
   /* Functions */
-  const checkEssential = () => {
-    let value = false;
-
+  const checkEssential = (e) => {
     signupInfo.check ? nextStep() : alert('필수 항목을 체크하세요.');
-
     return;
   };
 
   const handleType = (e) => {
-    let typevalue = -1;
+    let typevalue = '';
 
-    e.target.id === 'manager' ? (typevalue = 1) : (typevalue = 0);
+    e.target.id === 'user' ? (typevalue = '0') : (typevalue = '1');
 
     setSignupInfo({ ...signupInfo, type: typevalue });
   };

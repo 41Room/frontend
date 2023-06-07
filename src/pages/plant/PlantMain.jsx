@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+
+import PlantAPI from '../../api/module/PlantAPI';
 
 import Sidebar from '../../partials/Sidebar';
 import Header from '../../partials/Header';
@@ -9,9 +11,27 @@ import ShopCards04 from '../../partials/ecommerce/ShopCards04';
 import ShopCards05 from '../../partials/ecommerce/ShopCards05';
 import ShopCards06 from '../../partials/ecommerce/ShopCards06';
 
-function Plant() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+import testcontents from './components/testcontents';
+import MainContents from './components/MainContents';
 
+function Plant() {
+  /* Router */
+
+  /* State */
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [plantInfo, setPlantInfo] = useState('');
+
+  // 테스트 Data
+  const test = testcontents();
+
+  /* Hooks */
+  useEffect(async () => {
+    const result = await PlantAPI.getPlantList('');
+  }, []);
+
+  /* Functions */
+
+  /* Render */
   return (
     <div className="flex h-screen overflow-hidden">
       {/* Sidebar */}
@@ -28,7 +48,7 @@ function Plant() {
             <div className="mb-5">
               {/* Title */}
               <h1 className="text-2xl md:text-3xl text-slate-800 font-bold">
-                Find the right product for you ✨
+                41Room 시설 ✨
               </h1>
             </div>
 
@@ -36,7 +56,7 @@ function Plant() {
             <div className="max-w-xl mb-5">
               <form className="relative">
                 <label htmlFor="app-search" className="sr-only">
-                  Search
+                  검색
                 </label>
                 <input
                   id="app-search"
@@ -66,7 +86,7 @@ function Plant() {
               <ul className="text-sm font-medium flex flex-nowrap -mx-4 sm:-mx-6 lg:-mx-8 overflow-x-scroll no-scrollbar">
                 <li className="pb-3 mr-6 last:mr-0 first:pl-4 sm:first:pl-6 lg:first:pl-8 last:pr-4 sm:last:pr-6 lg:last:pr-8">
                   <a className="text-indigo-500 whitespace-nowrap" href="#0">
-                    View All
+                    All
                   </a>
                 </li>
                 <li className="pb-3 mr-6 last:mr-0 first:pl-4 sm:first:pl-6 lg:first:pl-8 last:pr-4 sm:last:pr-6 lg:last:pr-8">
@@ -107,35 +127,29 @@ function Plant() {
             {/* Page content */}
             <div>
               {/* Cards 1 (Video Courses) */}
-              <div className="mt-8">
-                <h2 className="text-xl leading-snug text-slate-800 font-bold mb-5">
-                  Video Courses
-                </h2>
-                <div className="grid grid-cols-12 gap-6">
-                  <ShopCards01 />
-                </div>
-              </div>
-
+              {/* Test 진행 중 */}
+              {/* {test.map((item, index) => {
+                return <MainContents key={index} />;
+              })} */}
+              <MainContents />
               {/* Cards 2 (Digital Goods) */}
               <div className="mt-8">
                 <h2 className="text-xl leading-snug text-slate-800 font-bold mb-5">
-                  Digital Goods
+                  Crowdfunding
                 </h2>
                 <div className="grid grid-cols-12 gap-6">
                   <ShopCards02 />
                 </div>
               </div>
-
               {/* Cards 3 (Online Events) */}
               <div className="mt-8">
                 <h2 className="text-xl leading-snug text-slate-800 font-bold mb-5">
-                  Online Events
+                  Crowdfunding
                 </h2>
                 <div className="grid grid-cols-12 gap-6">
                   <ShopCards03 />
                 </div>
               </div>
-
               {/* Cards 4 (Crowdfunding) */}
               <div className="mt-8">
                 <h2 className="text-xl leading-snug text-slate-800 font-bold mb-5">
@@ -145,7 +159,6 @@ function Plant() {
                   <ShopCards04 />
                 </div>
               </div>
-
               {/* Cards 5 (Popular Categories) */}
               <div className="mt-8">
                 <h2 className="text-xl leading-snug text-slate-800 font-bold mb-5">
@@ -155,7 +168,6 @@ function Plant() {
                   <ShopCards05 />
                 </div>
               </div>
-
               {/* Cards 6 (Trending Now) */}
               <div className="mt-8">
                 <h2 className="text-xl leading-snug text-slate-800 font-bold mb-5">

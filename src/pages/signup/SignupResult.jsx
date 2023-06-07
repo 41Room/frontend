@@ -7,7 +7,7 @@ import AuthDecoration from '../../images/auth-decoration.png';
 function SignupResult() {
   return (
     <div className="px-4 py-8">
-      <div className="max-w-md mx-auto">
+      <div className="max-w-xl mx-auto">
         <div className="text-center">
           <svg
             className="inline-flex w-16 h-16 fill-current mb-6"
@@ -20,13 +20,13 @@ function SignupResult() {
             />
           </svg>
           <h1 className="text-3xl text-slate-800 font-bold mb-8">
-            Nice to have you, Acme Inc. 🙌
+            41Room의 회원이 되신걸 축하드립니다 🙌
           </h1>
           <Link
             className="btn bg-indigo-500 hover:bg-indigo-600 text-white"
-            to="/"
+            to="/Signin"
           >
-            Go To Dashboard -&gt;
+            로그인 하기
           </Link>
         </div>
       </div>

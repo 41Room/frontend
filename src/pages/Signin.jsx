@@ -26,13 +26,13 @@ function Signin() {
   const { handleLoadingTimer } = useLoading();
 
   /* Functions */
+
+  // 로그인 Hash설정 필요함 ***************
   const handleSubmit = async (e) => {
     e.preventDefault();
     switch (signinInfo.type) {
-      case '1':
-        console.log('관리인');
-        return;
-      default:
+      case '0':
+        console.log('일반인');
         const tenantInfo = {
           tenant_login_id: signinInfo.email,
           tenant_login_pw: signinInfo.password,
@@ -46,13 +46,31 @@ function Signin() {
           return true;
         }
         return false;
+      case '1':
+        console.log('관리인');
+        const agentInfo = {
+          agent_login_id: signinInfo.email,
+          agent_login_pw: signinInfo.password,
+        };
+        const agentResult = await AuthApi.agentSignin(agentInfo);
+        if (agentResult) {
+          handleSession({ ...agentResult, user_nm: agentResult.agent_nm });
+          navigate('/');
+        }
     }
   };
 
+  // 로그인 타입 변경
+  const handleType = (e) => {
+    setSigninInfo({ ...signinInfo, type: e.target.id });
+  };
+
+  // 로그인 정보 State 변경
   const handleSigninInfo = (e) => {
     setSigninInfo({ ...signinInfo, [e.target.name]: e.target.value });
   };
 
+  // MetaMask 로그인
   const handleMetamask = (e) => {
     e.preventDefault();
     connect({ connector: connectors[0] });
@@ -66,7 +84,6 @@ function Signin() {
    */
   const handleAddressLogin = async (wallet_id) => {
     const result = await AuthApi.tenantSignin({ wallet_id });
-
     if (result) {
       handleLoadingTimer(3000, () => {
         handleSession({ ...result, user_nm: result.tenant_nm });
@@ -163,6 +180,8 @@ function Signin() {
                       name="radio-buttons"
                       className="peer sr-only"
                       defaultChecked
+                      id="0"
+                      onClick={handleType}
                     />
                     <div className="h-full text-center bg-white px-4 py-6 rounded border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out">
                       <svg
@@ -209,6 +228,8 @@ function Signin() {
                       type="radio"
                       name="radio-buttons"
                       className="peer sr-only"
+                      id="1"
+                      onClick={handleType}
                     />
                     <div className="h-full text-center bg-white px-4 py-6 rounded border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out">
                       <svg
