@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
-import PlantAPI from '../../api/module/PlantAPI';
-
 import Sidebar from '../../partials/Sidebar';
 import Header from '../../partials/Header';
+import { useSession } from '../../utils/SessionManager';
+import { usePlant } from '../../utils/PlantManager';
+
+import AppImage01 from '../../images/applications-image-01.jpg';
+import ContentItem from './components/ContentItem';
+
 import ShopCards01 from '../../partials/ecommerce/ShopCards01';
 import ShopCards02 from '../../partials/ecommerce/ShopCards02';
 import ShopCards03 from '../../partials/ecommerce/ShopCards03';
@@ -11,23 +15,15 @@ import ShopCards04 from '../../partials/ecommerce/ShopCards04';
 import ShopCards05 from '../../partials/ecommerce/ShopCards05';
 import ShopCards06 from '../../partials/ecommerce/ShopCards06';
 
-import testcontents from './components/testcontents';
-import MainContents from './components/MainContents';
-
 function Plant() {
   /* Router */
 
   /* State */
+  const { session } = useSession();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [plantInfo, setPlantInfo] = useState('');
-
-  // 테스트 Data
-  const test = testcontents();
+  const { plantList, setPlantList } = usePlant();
 
   /* Hooks */
-  useEffect(async () => {
-    const result = await PlantAPI.getPlantList('');
-  }, []);
 
   /* Functions */
 
@@ -126,55 +122,29 @@ function Plant() {
 
             {/* Page content */}
             <div>
-              {/* Cards 1 (Video Courses) */}
-              {/* Test 진행 중 */}
-              {/* {test.map((item, index) => {
-                return <MainContents key={index} />;
-              })} */}
-              <MainContents />
-              {/* Cards 2 (Digital Goods) */}
+              {/* Plant List */}
               <div className="mt-8">
                 <h2 className="text-xl leading-snug text-slate-800 font-bold mb-5">
-                  Crowdfunding
+                  예약 가능 시설
                 </h2>
                 <div className="grid grid-cols-12 gap-6">
-                  <ShopCards02 />
-                </div>
-              </div>
-              {/* Cards 3 (Online Events) */}
-              <div className="mt-8">
-                <h2 className="text-xl leading-snug text-slate-800 font-bold mb-5">
-                  Crowdfunding
-                </h2>
-                <div className="grid grid-cols-12 gap-6">
-                  <ShopCards03 />
-                </div>
-              </div>
-              {/* Cards 4 (Crowdfunding) */}
-              <div className="mt-8">
-                <h2 className="text-xl leading-snug text-slate-800 font-bold mb-5">
-                  Crowdfunding
-                </h2>
-                <div className="grid grid-cols-12 gap-6">
-                  <ShopCards04 />
-                </div>
-              </div>
-              {/* Cards 5 (Popular Categories) */}
-              <div className="mt-8">
-                <h2 className="text-xl leading-snug text-slate-800 font-bold mb-5">
-                  Popular Categories
-                </h2>
-                <div className="grid grid-cols-12 gap-6">
-                  <ShopCards05 />
-                </div>
-              </div>
-              {/* Cards 6 (Trending Now) */}
-              <div className="mt-8">
-                <h2 className="text-xl leading-snug text-slate-800 font-bold mb-5">
-                  Trending Now
-                </h2>
-                <div className="grid grid-cols-12 gap-6">
-                  <ShopCards06 />
+                  <React.Fragment>
+                    {plantList.map((item, index) => {
+                      {
+                        return (
+                          <ContentItem
+                            key={index}
+                            imgSrc={item.plant_img}
+                            plantId={item.plant_id}
+                            plantName={item.plant_nm}
+                            plantDesc={item.plant_desc}
+                            plantFee={item.plant_fee}
+                            star={3.8}
+                          />
+                        );
+                      }
+                    })}
+                  </React.Fragment>
                 </div>
               </div>
             </div>
