@@ -1,7 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { checkSession, getCookie, logout, setCookie } from '.';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useAccount, useConnect, useDisconnect } from 'wagmi';
+import { useAccount, useConnect, useDisconnect, useNetwork } from 'wagmi';
+import { useSwitchNetwork } from 'wagmi';
+// import { switchNetwork } from '@wagmi/core';
 
 const SessionContext = createContext(null);
 
@@ -19,7 +21,9 @@ const SessionManager = ({ children }) => {
   /* State */
   const [isSession, setIsSession] = useState(false);
   const [session, setSession] = useState(null);
-  const { isConnected, address } = useAccount();
+  const { connect, connectors } = useConnect();
+  const { isConnected, address, connector } = useAccount();
+  const network = useSwitchNetwork();
   const { disconnect } = useDisconnect();
 
   /* Functions */
@@ -31,10 +35,16 @@ const SessionManager = ({ children }) => {
       setSession(val);
       setIsSession(true);
       setCookie('41ROOM', JSON.stringify(val), 1);
+
       return true;
     } catch (error) {
       return false;
     }
+  };
+
+  const checkMetamask = async (addr) => {
+    const [metamask] = connectors;
+    connect({ connector: metamask });
   };
 
   const handleLogout = () => {
@@ -42,13 +52,13 @@ const SessionManager = ({ children }) => {
     if (isConnected) {
       disconnect();
     }
-
+    navigate('/signin');
     location.reload();
   };
 
   /* Hooks */
-
   useEffect(() => {
+    checkMetamask();
     if (session) {
       return;
     }
