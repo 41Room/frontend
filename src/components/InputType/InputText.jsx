@@ -11,19 +11,21 @@ function InputText(props) {
     inputName,
     inputCN = 'form-input w-full',
     inputType = 'text',
-    signupValue,
+    placeholder,
+    stateValue,
+    setStateValue,
   } = props;
 
-  const { signupInfo, setSignupInfo } = signupValue;
   const [checkPwd, setCheckPwd] = useState(true);
   /* Hooks */
 
   /* Functions */
   const handleValue = (e) => {
-    setSignupInfo({ ...signupInfo, [e.target.name]: e.target.value });
+    setStateValue({ ...stateValue, [e.target.name]: e.target.value });
   };
+
   const handlePwdCheck = (e) => {
-    e.target.value !== signupInfo.pwd ? setCheckPwd(false) : setCheckPwd(true);
+    e.target.value !== stateValue.pwd ? setCheckPwd(false) : setCheckPwd(true);
   };
   /* Render */
   return (
@@ -40,6 +42,7 @@ function InputText(props) {
         className={inputCN}
         type={inputType}
         name={inputName}
+        placeholder={placeholder}
         onBlur={inputName === 'checkpwd' ? handlePwdCheck : handleValue}
       />
     </div>

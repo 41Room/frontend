@@ -8,15 +8,16 @@ function SignupForm(props) {
   /* Router */
   /* State */
   const { signupValue, functions } = props;
-  const { signupStep } = signupValue;
+  const { signupInfo } = signupValue;
   /* Hooks */
   /* Functions */
+
   /* Render */
   return (
     <div className="max-w-sm mx-auto px-4 py-8">
       <h1 className="text-3xl text-slate-800 font-bold mb-6">회원가입 ✨</h1>
       {/* Form */}
-      {signupStep.type === 0 ? (
+      {signupInfo.type === '0' ? (
         <FormUser signupValue={signupValue} functions={functions} />
       ) : (
         <FormManager signupValue={signupValue} functions={functions} />
