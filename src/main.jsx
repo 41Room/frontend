@@ -8,17 +8,12 @@ import './global';
 import { infuraProvider } from 'wagmi/providers/infura';
 import { publicProvider } from 'wagmi/providers/public';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
-import {
-  WagmiConfig,
-  createConfig,
-  configureChains,
-  mainnet,
-  sepolia,
-} from 'wagmi';
+import { WagmiConfig, createConfig, configureChains, sepolia } from 'wagmi';
 import { API_KEY } from './utils';
+import LoadingManager from './hooks/useLoading';
 
 const { chains, publicClient } = configureChains(
-  [mainnet, sepolia],
+  [sepolia],
   [infuraProvider({ apiKey: API_KEY }), publicProvider()]
 );
 
@@ -35,11 +30,13 @@ const config = createConfig({
 ReactDOM.createRoot(document.getElementById('root')).render(
   // <React.StrictMode>
   <Router>
-    <SessionManager>
-      <WagmiConfig config={config}>
-        <App />
-      </WagmiConfig>
-    </SessionManager>
+    <WagmiConfig config={config}>
+      <LoadingManager>
+        <SessionManager>
+          <App />
+        </SessionManager>
+      </LoadingManager>
+    </WagmiConfig>
   </Router>
   // </React.StrictMode>
 );
