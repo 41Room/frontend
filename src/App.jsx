@@ -45,12 +45,16 @@ function App() {
       <Route path="/plantreview" element={<PlantReview />} />
       <Route path="/signin" element={<Signin />} />
       <Route path="/signup" element={<Signup />} />
-      <Route path="/community" element={<CommunityMain />} />
-      <Route path="/communitydetail" element={<CommunityDetail />} />
-      <Route path="/communityregister" element={<CommunityRegister />} />
-      <Route path="/financial" element={<FinancialDetail />} />
-      <Route path="/financialpurchase" element={<FinancialPurchase />} />
-      <Route path="/financialdashboard" element={<FinancialDashboard />} />
+      <Route path="/community">
+        <Route index element={<CommunityMain />} />
+        <Route path=":community_id" element={<CommunityDetail />} />
+        <Route path="register" element={<CommunityRegister />} />
+      </Route>
+      <Route path="/financial">
+        <Route index element={<FinancialDetail />} />
+        <Route path="purchase" element={<FinancialPurchase />} />
+        <Route path="dashboard" element={<FinancialDashboard />} />
+      </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

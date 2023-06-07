@@ -30,7 +30,7 @@ const CommunityAPI = {
    */
   getCommunityList: async (building_id) => {
     try {
-      const url = APIConstant.GET_PLANT_LIST.replace(
+      const url = APIConstant.GET_COMMUNITY_LIST.replace(
         ':building_id',
         building_id
       );

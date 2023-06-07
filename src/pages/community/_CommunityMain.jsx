@@ -7,7 +7,12 @@ import MeetupsPosts from '../../partials/community/MeetupsPosts';
 import PaginationNumeric from '../../components/PaginationNumeric';
 
 function CommunityMain() {
+  /* Router */
+  /* State */
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  /* Functions */
+  /* Hooks */
+  /* Render */
 
   return (
     <div className="flex h-screen overflow-hidden">
