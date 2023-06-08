@@ -32,8 +32,6 @@ const ReviewAPI = {
     try {
       const url = APIConstant.GET_REVIEW_LIST.replace(':plant_id', plant_id);
 
-      console.log('URL');
-      console.log(url);
       const result = await $http.get(url);
       const { status, message, data } = result;
       if (status === 200) {

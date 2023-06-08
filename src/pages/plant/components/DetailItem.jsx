@@ -63,9 +63,6 @@ function DetailItem(props) {
           {/* Stars */}
           <div className="w-full flex justify-between items-center space-x-2 mr-2">
             <Star star={star} />
-            <a className="btn w-24 bg-indigo-500 hover:bg-indigo-600 text-white">
-              예약하기
-            </a>
           </div>
         </div>
       </div>

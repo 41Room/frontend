@@ -67,6 +67,7 @@ const SessionManager = ({ children }) => {
       // navigate('/signin');
     }
     const sess = JSON.parse(getCookie('41ROOM'));
+
     handleSession(sess);
   }, [session]);
 
