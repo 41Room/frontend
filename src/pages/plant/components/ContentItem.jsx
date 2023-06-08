@@ -11,11 +11,10 @@ function ContentItem(props) {
   const {
     imgSrc,
     plantId = '',
-    plantName,
-    plantDesc,
-    plantFee,
+    plantName = '',
+    plantDesc = '',
+    plantFee = 0,
     star = 0,
-    btnText = '예약',
   } = props;
 
   /* Hooks */

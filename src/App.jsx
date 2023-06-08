@@ -43,8 +43,8 @@ function App() {
         <Route path=":plant_id" element={<PlantDetail />} />
         <Route path="register" element={<PlantRegister />} />
         <Route path="review/:plant_id" element={<PlantReview />} />
+        <Route path="complaints/:plant_id" element={<PlantComplaints />} />
       </Route>
-      <Route path="/plantcomplaints" element={<PlantComplaints />} />
       <Route path="/signin" element={<Signin />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/community">

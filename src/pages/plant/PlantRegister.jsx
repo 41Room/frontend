@@ -3,8 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import Sidebar from '../../partials/Sidebar';
 import Header from '../../partials/Header';
+import { usePlant } from 'utils/PlantManager';
 
-import PlantAPI from '../../api/module/PlantApi';
+import { PlantAPI } from 'api';
 
 import ProductImage01 from '../../images/related-product-01.jpg';
 import ProductImage02 from '../../images/related-product-02.jpg';
@@ -27,9 +28,10 @@ const registerInit = {
 
 function PlantRegister() {
   /* Router */
+  const navigate = useNavigate();
 
   /* State */
-  const navigate = useNavigate();
+  const { plantList, setPlantList } = usePlant();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [registerInfo, setRegisterInfo] = useState(registerInit);
 
@@ -166,14 +168,11 @@ function PlantRegister() {
                       {/* Order Details */}
                       {/* Card 1 */}
                       <ContentItem
-                        imgSrc={ProductImage01}
-                        plantName="부산대학교"
-                        price={39000}
+                        imgSrc={plantList[0].plant_img}
+                        plantName={plantList[0].plant_nm}
+                        price={plantList[0].plant_fee}
                         star={4.8}
-                        firstText="24시간 Open"
-                        secondText="20개 건물"
-                        thirdText="무료 Wifi"
-                        fourthText="900만명 이상 방문"
+                        plantDesc={plantList[0].plant_desc}
                       />
                     </div>
                   </div>

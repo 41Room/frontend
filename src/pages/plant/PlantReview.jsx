@@ -1,13 +1,65 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Sidebar from '../../partials/Sidebar';
 import Header from '../../partials/Header';
-import SettingsSidebar from '../../partials/settings/SettingsSidebar';
-import FeedbackPanel from '../../partials/settings/FeedbackPanel';
+import { PlantAPI } from 'api';
+import { Link, useParams } from 'react-router-dom';
+import { toolongText } from 'utils/Utils';
+import TextArea from 'components/InputType/TextArea';
+import InputRate from 'components/InputType/InputRate';
+
+const reviewInit = {
+  plant_id: '',
+  plant_nm: '',
+  plant_desc: '',
+  star: 0,
+  review: '',
+};
 
 function PlantReview() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  /* Router */
 
+  /* State */
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const params = useParams();
+  const { plant_id } = params;
+  const [reviewInfo, setReviewInfo] = useState(reviewInit);
+
+  /* Hooks */
+  useEffect(() => {
+    const getDetail = async () => {
+      try {
+        const result = await PlantAPI.getPlant(plant_id);
+
+        if (result) {
+          setReviewInfo({
+            ...reviewInfo,
+            plant_id: result.plant_id,
+            plant_nm: result.plant_nm,
+            plant_desc: result.plant_desc,
+          });
+        }
+      } catch (e) {
+        console.log(e);
+        throw e;
+      }
+    };
+
+    getDetail();
+  }, []);
+
+  /* Functions */
+  const handleSubmit = (e) => {
+    if (reviewInfo.star === 0 || reviewInfo.review === '') {
+      alert('모든 항목을 입력해주세요');
+      return;
+    }
+
+    console.log('제출 데이타');
+    console.log(reviewInfo);
+  };
+
+  /* Render */
   return (
     <div className="flex h-screen overflow-hidden">
       {/* Sidebar */}
@@ -24,7 +76,7 @@ function PlantReview() {
             <div className="mb-8">
               {/* Title */}
               <h1 className="text-2xl md:text-3xl text-slate-800 font-bold">
-                Plant Review ✨
+                리뷰 작성 ! ✨
               </h1>
             </div>
 
@@ -37,76 +89,41 @@ function PlantReview() {
                   <div className="p-6 space-y-6">
                     <div>
                       <h2 className="text-2xl text-slate-800 font-bold mb-4">
-                        Give Feedback
+                        {reviewInfo.plant_nm}
                       </h2>
                       <div className="text-sm">
-                        Our product depends on customer feedback to improve the
-                        overall experience!
+                        {reviewInfo.plant_desc &&
+                          toolongText(reviewInfo.plant_desc, 500)}{' '}
                       </div>
                     </div>
+
+                    <hr className="my-6 border-t border-slate-200" />
 
                     {/* Rate */}
                     <section>
                       <h3 className="text-xl leading-snug text-slate-800 font-bold mb-6">
-                        How likely would you recommend us to a friend or
-                        colleague?
+                        얼마나 최고였나요 ?!
                       </h3>
-                      <div className="w-full max-w-xl">
-                        <div className="relative">
-                          <div
-                            className="absolute left-0 top-1/2 -mt-px w-full h-0.5 bg-slate-200"
-                            aria-hidden="true"
-                          ></div>
-                          <ul className="relative flex justify-between w-full">
-                            <li className="flex">
-                              <button className="w-3 h-3 rounded-full bg-white border-2 border-slate-400">
-                                <span className="sr-only">1</span>
-                              </button>
-                            </li>
-                            <li className="flex">
-                              <button className="w-3 h-3 rounded-full bg-white border-2 border-slate-400">
-                                <span className="sr-only">2</span>
-                              </button>
-                            </li>
-                            <li className="flex">
-                              <button className="w-3 h-3 rounded-full bg-indigo-500 border-2 border-indigo-500">
-                                <span className="sr-only">3</span>
-                              </button>
-                            </li>
-                            <li className="flex">
-                              <button className="w-3 h-3 rounded-full bg-white border-2 border-slate-400">
-                                <span className="sr-only">4</span>
-                              </button>
-                            </li>
-                            <li className="flex">
-                              <button className="w-3 h-3 rounded-full bg-white border-2 border-slate-400">
-                                <span className="sr-only">5</span>
-                              </button>
-                            </li>
-                          </ul>
-                        </div>
-                        <div className="w-full flex justify-between text-sm text-slate-500 italic mt-3">
-                          <div>Bad</div>
-                          <div>Perfect</div>
-                        </div>
-                      </div>
+                      <InputRate
+                        stateValue={reviewInfo}
+                        setStateValue={setReviewInfo}
+                      />
                     </section>
+
+                    <hr className="my-6 border-t border-slate-200" />
 
                     {/* Tell us in words */}
                     <section>
                       <h3 className="text-xl leading-snug text-slate-800 font-bold mb-5">
-                        Tell us in words
+                        마음껏 작성해주세요!
                       </h3>
                       {/* Form */}
-                      <label className="sr-only" htmlFor="feedback">
-                        Leave a feedback
-                      </label>
-                      <textarea
-                        id="feedback"
-                        className="form-textarea w-full focus:border-slate-300"
-                        rows="10"
-                        placeholder="I really enjoy…"
-                        style={{ resize: 'none' }}
+                      <TextArea
+                        Name="욕설, 모욕 및 비방 글은 판,검사님과의 면담을 초래합니다..."
+                        inputName="review"
+                        placeholder="여러분의 경험을 공유해주세요 !"
+                        stateValue={reviewInfo}
+                        setStateValue={setReviewInfo}
                       />
                     </section>
                   </div>
@@ -115,11 +132,16 @@ function PlantReview() {
                   <footer>
                     <div className="flex flex-col px-6 py-5 border-t border-slate-200">
                       <div className="flex self-end">
-                        <button className="btn border-slate-200 hover:border-slate-300 text-slate-600">
-                          Cancel
-                        </button>
-                        <button className="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-3">
-                          Submit
+                        <Link to={'/plant/' + plant_id}>
+                          <button className="btn border-slate-200 hover:border-slate-300 text-slate-600">
+                            나중에 쓸게요
+                          </button>
+                        </Link>
+                        <button
+                          className="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-3"
+                          onClick={handleSubmit}
+                        >
+                          리뷰 작성
                         </button>
                       </div>
                     </div>

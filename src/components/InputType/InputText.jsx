@@ -12,8 +12,10 @@ function InputText(props) {
     inputCN = 'form-input w-full',
     inputType = 'text',
     placeholder,
+    defaultValue = '',
     stateValue,
     setStateValue,
+    readOnly = false,
   } = props;
 
   const [checkPwd, setCheckPwd] = useState(true);
@@ -43,6 +45,8 @@ function InputText(props) {
         type={inputType}
         name={inputName}
         placeholder={placeholder}
+        defaultValue={defaultValue}
+        readOnly={readOnly}
         onBlur={inputName === 'checkpwd' ? handlePwdCheck : handleValue}
       />
     </div>

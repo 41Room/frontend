@@ -35,9 +35,8 @@ export const formatThousands = (value) =>
     notation: 'compact',
   }).format(value);
 
-export const toolongText = (value, length) => {
-  const result =
-    value.length > length ? value.substr(0, length) + ' ...' : value;
-
-  return result;
+export const toolongText = (value, textlength) => {
+  return value.length > textlength
+    ? value.substr(0, textlength) + ' ...'
+    : value;
 };

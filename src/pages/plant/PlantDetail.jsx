@@ -6,6 +6,7 @@ import DetailItem from './components/DetailItem';
 
 import { useParams } from 'react-router-dom';
 import PlantAPI from '../../api/module/PlantAPI';
+import BookForm from './components/BookForm';
 
 function PlantDetail(props) {
   /* Router */
@@ -50,9 +51,9 @@ function PlantDetail(props) {
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
         <main>
-          <div className="px-4 sm:px-6 lg:px-8 py-8 w-full">
+          <div className="lg:relative lg:flex">
             {/* Page content */}
-            <div className="max-w-5xl mx-auto flex flex-col lg:flex-row lg:space-x-8 xl:space-x-16">
+            <div className="px-4 sm:px-6 lg:px-8 py-8 lg:grow lg:pr-8 xl:pr-16 2xl:ml-[80px]">
               {/* Content */}
               <div>
                 <div className="mb-3">
@@ -68,6 +69,7 @@ function PlantDetail(props) {
                 <hr className="my-6 border-t border-slate-200" />
               </div>
             </div>
+            <BookForm plant_id={plant_id} stateValue={detailInfo} />
           </div>
         </main>
       </div>
