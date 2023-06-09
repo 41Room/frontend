@@ -21,6 +21,7 @@ const {
   FinancialPurchase,
   FinancialDetail,
   FinancialDashboard,
+  FinancialExchange,
 } = financial;
 
 function App() {
@@ -56,6 +57,7 @@ function App() {
         <Route index element={<FinancialDetail />} />
         <Route path="purchase" element={<FinancialPurchase />} />
         <Route path="dashboard" element={<FinancialDashboard />} />
+        <Route path="exchange" element={<FinancialExchange />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>

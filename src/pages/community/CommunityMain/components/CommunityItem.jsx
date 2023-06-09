@@ -1,22 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
-import MeetupsThumb01 from 'images/meetups-thumb-01.jpg';
-import MeetupsThumb02 from 'images/meetups-thumb-02.jpg';
-import MeetupsThumb03 from 'images/meetups-thumb-03.jpg';
-import MeetupsThumb04 from 'images/meetups-thumb-04.jpg';
-import MeetupsThumb05 from 'images/meetups-thumb-05.jpg';
-import MeetupsThumb06 from 'images/meetups-thumb-06.jpg';
-import MeetupsThumb07 from 'images/meetups-thumb-07.jpg';
-import MeetupsThumb08 from 'images/meetups-thumb-08.jpg';
-import UserImage01 from 'images/avatar-01.jpg';
-import UserImage02 from 'images/avatar-02.jpg';
-import UserImage03 from 'images/avatar-03.jpg';
-import UserImage04 from 'images/avatar-04.jpg';
-import UserImage05 from 'images/avatar-05.jpg';
-import UserImage06 from 'images/avatar-06.jpg';
-import { getRandomInt } from 'utils';
-const CommunityItem = ({ community }) => {
+import { getRandomInt, loremIpsum } from 'utils';
+const CommunityItem = ({ community, avatar }) => {
   /* Router */
   /* State */
   const { community_id, community_title, community_content, tenant_nm } =
@@ -25,7 +11,6 @@ const CommunityItem = ({ community }) => {
     community_content.length >= 180
       ? community_content.slice(0, 180) + '...'
       : community_content;
-
   const avatarList = [...new Array(3)];
   const plusNum = getRandomInt(1, 50);
   /* Functions */
@@ -80,10 +65,10 @@ const CommunityItem = ({ community }) => {
           </div>
           <Link className="inline-flex mb-2" to={`/community/${community_id}`}>
             <h3 className="text-lg font-bold text-slate-800">
-              {community_title}
+              {community_title || 'Community Title'}
             </h3>
           </Link>
-          <div className="text-sm">{content}</div>
+          <div className="text-sm">{content || loremIpsum}</div>
         </div>
         {/* Footer */}
         <div className="flex justify-between mt-3">
@@ -95,10 +80,11 @@ const CommunityItem = ({ community }) => {
             <span>Online Event</span>
           </div> */}
           {/* Avatars */}
-          <div className="flex items-center space-x-2">
-            <div className="flex -space-x-3 -ml-0.5">
-              {avatarRandom}
-              {/* <img
+          {avatar || (
+            <div className="flex items-center space-x-2">
+              <div className="flex -space-x-3 -ml-0.5">
+                {avatarRandom}
+                {/* <img
                 className="rounded-full border-2 border-white box-content"
                 src={UserImage01}
                 width="28"
@@ -119,11 +105,12 @@ const CommunityItem = ({ community }) => {
                 height="28"
                 alt="User 05"
               /> */}
+              </div>
+              <div className="text-xs font-medium text-slate-400 italic">
+                +{plusNum}
+              </div>
             </div>
-            <div className="text-xs font-medium text-slate-400 italic">
-              +{plusNum}
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </article>

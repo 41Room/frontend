@@ -4,22 +4,6 @@ import { Link } from 'react-router-dom';
 import Sidebar from 'partials/Sidebar';
 import Header from 'partials/Header';
 
-import MeetupImage from 'images/meetup-image.jpg';
-import MeetupPhoto01 from 'images/meetup-photo-01.jpg';
-import MeetupPhoto02 from 'images/meetup-photo-02.jpg';
-import MeetupPhoto03 from 'images/meetup-photo-03.jpg';
-import MeetupThumb from 'images/meetups-thumb-02.jpg';
-import UserImage01 from 'images/user-32-01.jpg';
-import UserImage02 from 'images/user-32-02.jpg';
-import UserImage03 from 'images/user-32-03.jpg';
-import UserImage04 from 'images/user-32-04.jpg';
-import UserImage05 from 'images/user-32-05.jpg';
-import UserImage06 from 'images/user-32-06.jpg';
-import UserImage07 from 'images/user-32-07.jpg';
-import UserImage08 from 'images/user-32-08.jpg';
-import Avatar02 from 'images/avatar-02.jpg';
-import Avatar03 from 'images/avatar-03.jpg';
-import Avatar04 from 'images/avatar-04.jpg';
 import { useSession } from 'utils/SessionManager';
 import { getRandomInt } from 'utils';
 
@@ -37,7 +21,7 @@ const CommunityDetailPresenter = ({ community, thumbnail, userList }) => {
     .split('\n')
     .map((line, idx) => {
       return (
-        <p className="mb-6" key={idx}>
+        <p className="mb-1" key={idx}>
           {line}
         </p>
       );
@@ -46,47 +30,42 @@ const CommunityDetailPresenter = ({ community, thumbnail, userList }) => {
   const voteRender = community?.vote.map((item, idx) => {
     const { vote_id, vote_title, vote_description } = item;
     return (
-      <div key={vote_id}>
-        <h2 className="text-xl leading-snug text-slate-800 font-bold mb-2">
-          Vote {idx + 1}
-        </h2>
-        <ul className="space-y-5 my-6">
-          <li className="flex items-start">
-            <div className="grow">
-              <div className="text-2xl font-semibold text-slate-800 mb-2">
-                {vote_title}
-              </div>
-              <div className="italic">{vote_description}</div>
+      <ul className="space-y-5 my-6" key={vote_id}>
+        <li className="flex items-start">
+          <div className="grow">
+            <div className="text-2xl font-semibold text-slate-800 mb-2">
+              {vote_title}
             </div>
-          </li>
-          <li className="flex items-start">
-            <div className="italic w-full">
-              <button className="w-full pt-5 pb-5 btn border-slate-200 hover:border-slate-300 text-indigo-500 bg-white">
-                Yes
-              </button>
-            </div>
-          </li>
-          <li className="flex items-start">
-            <div className="italic w-full">
-              <button className="w-full pt-5 pb-5 btn border-slate-200 hover:border-slate-300 text-indigo-500 bg-white">
-                No
-              </button>
-            </div>
-          </li>
-        </ul>
-      </div>
+            <div className="italic">{vote_description}</div>
+          </div>
+        </li>
+        <li className="flex items-start">
+          <div className="italic w-full">
+            <button className="w-full pt-5 pb-5 btn border-slate-200 hover:border-slate-300 text-indigo-500 bg-white">
+              Yes
+            </button>
+          </div>
+        </li>
+        <li className="flex items-start">
+          <div className="italic w-full">
+            <button className="w-full pt-5 pb-5 btn border-slate-200 hover:border-slate-300 text-indigo-500 bg-white">
+              No
+            </button>
+          </div>
+        </li>
+      </ul>
     );
   });
 
   const commentRender = community?.reply.map((item) => {
     const { reply_id, reply_content, tenant } = item;
-    const { tenant_nm } = tenant;
+    const { tenant_id, tenant_nm } = tenant;
     return (
       <li className="flex items-start" key={reply_id}>
         <a className="block mr-3 shrink-0" href="#0">
           <img
             className="rounded-full"
-            src={UserImage07}
+            src={`https://i.pravatar.cc/150?u=${tenant_id}`}
             width="32"
             height="32"
             alt="User 07"
@@ -243,7 +222,12 @@ const CommunityDetailPresenter = ({ community, thumbnail, userList }) => {
                 <hr className="my-6 border-t border-slate-200" />
 
                 {/* Comments */}
-                {voteRender}
+                <div>
+                  <h2 className="text-xl leading-snug text-slate-800 font-bold mb-2">
+                    Vote({community?.vote.length})
+                  </h2>
+                  {voteRender}
+                </div>
 
                 <hr className="my-6 border-t border-slate-200" />
 
@@ -270,7 +254,7 @@ const CommunityDetailPresenter = ({ community, thumbnail, userList }) => {
                       </svg>
                       <span className="ml-1">Attending</span>
                     </button>
-                    <button className="btn w-full border-slate-200 hover:border-slate-300 text-slate-600">
+                    {/* <button className="btn w-full border-slate-200 hover:border-slate-300 text-slate-600">
                       <svg
                         className="w-4 h-4 fill-rose-500 shrink-0"
                         viewBox="0 0 16 16"
@@ -278,7 +262,7 @@ const CommunityDetailPresenter = ({ community, thumbnail, userList }) => {
                         <path d="M14.682 2.318A4.485 4.485 0 0 0 11.5 1 4.377 4.377 0 0 0 8 2.707 4.383 4.383 0 0 0 4.5 1a4.5 4.5 0 0 0-3.182 7.682L8 15l6.682-6.318a4.5 4.5 0 0 0 0-6.364Zm-1.4 4.933L8 12.247l-5.285-5A2.5 2.5 0 0 1 4.5 3c1.437 0 2.312.681 3.5 2.625C9.187 3.681 10.062 3 11.5 3a2.5 2.5 0 0 1 1.785 4.251h-.003Z" />
                       </svg>
                       <span className="ml-2">Favorite</span>
-                    </button>
+                    </button> */}
                   </div>
                 </div>
 
