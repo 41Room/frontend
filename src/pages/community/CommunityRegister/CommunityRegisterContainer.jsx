@@ -25,7 +25,6 @@ const CommunityRegisterContainer = () => {
     if (!isSession) {
       return;
     }
-    console.log(session);
   }, [isSession]);
 
   /* Render */

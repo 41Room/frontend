@@ -40,11 +40,7 @@ function BookForm(props) {
   /* Functions */
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    console.log(bookInfo);
-
     if (!session) {
-      console.log(session);
       alert('로그인을 진행해주세요 ');
       return;
     }

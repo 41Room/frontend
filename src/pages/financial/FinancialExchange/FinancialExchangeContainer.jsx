@@ -17,7 +17,6 @@ const FinancialExchangeContainer = () => {
     const result = await CommonAPI.getRandomImage();
     if (result) {
       const { thumbnailUrl } = result;
-      console.log(result);
       setThumbnail(thumbnailUrl);
     }
   };

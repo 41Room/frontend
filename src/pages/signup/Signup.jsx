@@ -60,8 +60,7 @@ function Signup() {
 
       switch (signupInfo.type) {
         case '0':
-          console.log('일반인');
-          console.log(signupInfo);
+          // 구현 필요
           const tenantInfo = {
             building_id: '10351335-4b10-4611-a11d-61bf2ac869f2',
             tenant_login_id: signupInfo.email,
@@ -72,7 +71,6 @@ function Signup() {
             wallet_id: signupInfo.wallet,
           };
 
-          console.log(tenantInfo);
           const tenantResult = await AuthApi.tenantSignup(tenantInfo);
           if (tenantResult) {
             nextStep();
@@ -83,7 +81,7 @@ function Signup() {
           }
           return false;
         case '1':
-          console.log('대리인');
+          // 구현 필요
           const agentInfo = {
             building_id: '10351335-4b10-4611-a11d-61bf2ac869f2',
             agent_login_id: signupInfo.email,
@@ -92,7 +90,6 @@ function Signup() {
             wallet_addr: signupInfo.wallet,
           };
 
-          console.log(agentInfo);
           const agentResult = await AuthApi.agentSignup(agentInfo);
           if (agentResult) {
             nextStep();

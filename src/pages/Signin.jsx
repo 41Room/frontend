@@ -32,7 +32,6 @@ function Signin() {
     e.preventDefault();
     switch (signinInfo.type) {
       case '0':
-        console.log('일반인');
         const tenantInfo = {
           tenant_login_id: signinInfo.email,
           tenant_login_pw: signinInfo.password,
@@ -47,7 +46,6 @@ function Signin() {
         }
         return false;
       case '1':
-        console.log('관리인');
         const agentInfo = {
           agent_login_id: signinInfo.email,
           agent_login_pw: signinInfo.password,

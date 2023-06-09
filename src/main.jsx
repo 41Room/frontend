@@ -27,8 +27,6 @@ const _41room = {
   },
 };
 
-console.log(_41room);
-
 const { chains, publicClient } = configureChains(
   [sepolia, _41room],
   [infuraProvider({ apiKey: API_KEY }), publicProvider()]

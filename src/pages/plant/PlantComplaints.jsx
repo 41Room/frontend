@@ -36,8 +36,6 @@ function PlantComplaints() {
         const result = await PlantAPI.getPlant(plant_id);
 
         if (result) {
-          console.log('result');
-          console.log(result);
           setComplaintInfo({
             ...complaintInfo,
             tenant_id: session.tenant_id,
@@ -62,7 +60,6 @@ function PlantComplaints() {
       return;
     }
 
-    console.log('Test');
     console.log(complaintInfo);
   };
 

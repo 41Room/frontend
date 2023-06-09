@@ -15,9 +15,12 @@ export const useSession = () => {
   return context;
 };
 
+const WHITE_LIST = ['signin', 'signup'];
+
 const SessionManager = ({ children }) => {
   /* Router */
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   /* State */
   const [isSession, setIsSession] = useState(false);
   const [session, setSession] = useState(null);
@@ -50,7 +53,6 @@ const SessionManager = ({ children }) => {
 
   const handleLogout = () => {
     logout();
-    console.log(isConnected);
     if (isConnected) {
       disconnect();
     }
@@ -64,8 +66,11 @@ const SessionManager = ({ children }) => {
       return;
     }
     if (!checkSession()) {
-      // 회원가입 화면전환 필요함
-      // navigate('/signin');
+      const cond = WHITE_LIST.some((item) => pathname.includes(item));
+      if (!cond) {
+        // 회원가입 화면전환 필요함
+        navigate('/signin');
+      }
     }
     const sess = JSON.parse(getCookie('41ROOM'));
 
