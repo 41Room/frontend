@@ -38,7 +38,9 @@ const CommunityMainContainer = () => {
   }, [session]);
 
   /* Render */
-  return <CommunityMainPresenter communityList={communityList} />;
+  return (
+    <CommunityMainPresenter communityList={communityList} session={session} />
+  );
 };
 
 export default CommunityMainContainer;

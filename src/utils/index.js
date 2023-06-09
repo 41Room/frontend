@@ -72,3 +72,12 @@ export const deleteCookie = (name, { path, domain }) => {
       ';expires=Thu, 01 Jan 1970 00:00:01 GMT';
   }
 };
+
+export const getRandomInt = (min = 1, max = 20) => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min; //최댓값은 제외, 최솟값은 포함
+};
+
+export const loremIpsum =
+  'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Totam, mollitia commodi a eius nemo aspernatur libero repellat quam recusandae. Natus qui laborum dolorum nostrum consequatur iste consequuntur eius labore repellat.';
