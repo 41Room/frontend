@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import InputText from 'components/InputType/InputText';
 
 import { useSession } from 'utils/SessionManager';
+import { ReviewAPI } from 'api';
 
 const bookInit = {
   name: '',
@@ -37,8 +38,10 @@ function BookForm(props) {
   }, []);
 
   /* Functions */
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    console.log(bookInfo);
 
     if (!session) {
       console.log(session);
@@ -56,9 +59,9 @@ function BookForm(props) {
 
     if (bookInfo.date === '' || bookInfo.time === '') {
       alert('모든 항목을 입력해주세요 !');
-      return;
+      return false;
     } else {
-      alert('모든 항목 입력완료 !');
+      return true;
     }
   };
 

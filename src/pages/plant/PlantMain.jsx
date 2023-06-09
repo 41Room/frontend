@@ -5,15 +5,7 @@ import Header from '../../partials/Header';
 import { useSession } from '../../utils/SessionManager';
 import { usePlant } from '../../utils/PlantManager';
 
-import AppImage01 from '../../images/applications-image-01.jpg';
 import ContentItem from './components/ContentItem';
-
-import ShopCards01 from '../../partials/ecommerce/ShopCards01';
-import ShopCards02 from '../../partials/ecommerce/ShopCards02';
-import ShopCards03 from '../../partials/ecommerce/ShopCards03';
-import ShopCards04 from '../../partials/ecommerce/ShopCards04';
-import ShopCards05 from '../../partials/ecommerce/ShopCards05';
-import ShopCards06 from '../../partials/ecommerce/ShopCards06';
 
 function Plant() {
   /* Router */

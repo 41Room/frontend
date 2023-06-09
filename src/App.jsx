@@ -10,6 +10,7 @@ import plant from './pages/plant';
 import community from './pages/community';
 import financial from './pages/financial';
 import { useLoading } from './hooks/useLoading';
+import Dashboard from 'pages/Dashboard';
 
 // Import pages
 const { Signin, Signup, MainDashboard, Welcome, PageNotFound } = pages;
@@ -36,8 +37,8 @@ function App() {
 
   return (
     <Routes>
-      <Route exact path="/" element={<Welcome />} />
-      <Route path="/dashboard" element={<MainDashboard />} />
+      <Route exact path="/" element={<MainDashboard />} />
+      {/* <Route path="/dashboard" element={<MainDashboard />} /> */}
       <Route path="/plant">
         <Route index element={<PlantMain />} />
         <Route path=":plant_id" element={<PlantDetail />} />
@@ -58,6 +59,9 @@ function App() {
         <Route path="dashboard" element={<FinancialDashboard />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
+
+      {/* Test */}
+      <Route path="test" element={<Dashboard />} />
     </Routes>
   );
 }
