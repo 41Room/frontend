@@ -86,8 +86,6 @@ function PlantRegister() {
       const result = await PlantAPI.createPlant(plantInfo);
 
       if (result) {
-        console.log('result');
-        console.log(result);
         navigate('/plant/' + result.plant_id);
       } else {
         // *ISSUE* 이미지 삭제 처리가 필요함

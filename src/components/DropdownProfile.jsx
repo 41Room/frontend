@@ -30,7 +30,7 @@ function DropdownProfile({ align }) {
   });
 
   useEffect(() => {
-    console.log(session);
+    // console.log(session);
   }, [session]);
 
   const handleLogout = () => {

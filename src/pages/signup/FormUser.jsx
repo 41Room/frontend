@@ -40,7 +40,6 @@ function FormUser(props) {
 
   useEffect(() => {
     if (!isConnected) return;
-    console.log(address);
     setWallet(address);
     setSignupInfo({ ...signupInfo, wallet_id: address });
     return () => {
@@ -52,7 +51,6 @@ function FormUser(props) {
   const handleMetamask = (e) => {
     e.preventDefault();
     connect({ connector: connectors[0] });
-    console.log(address);
   };
   /* Render */
   return (

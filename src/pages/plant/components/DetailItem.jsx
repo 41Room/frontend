@@ -33,8 +33,6 @@ function DetailItem(props) {
       try {
         const result = await ReviewAPI.getReviewList(plant_id);
 
-        console.log(stateValue);
-
         if (result) {
           setReviewList(result);
         }

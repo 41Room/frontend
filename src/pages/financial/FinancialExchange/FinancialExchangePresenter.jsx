@@ -8,7 +8,6 @@ function FinancialExchangePresenter({ session, thumbnail, submit }) {
   /* State */
   const [exchange, setExchange] = useState(1000);
   const [toggle, setToggle] = useState(false);
-  console.log(session);
   const won = exchange;
   const token = exchange / 1000;
   /* Functions */
