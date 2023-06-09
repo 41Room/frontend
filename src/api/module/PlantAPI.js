@@ -55,8 +55,11 @@ const PlantAPI = {
    */
   getPlant: async (plant_id) => {
     try {
+      console.log(plant_id);
       const url = APIConstant.GET_PLANT.replace(':plant_id', plant_id);
+      console.log(url);
       const result = await $http.get(url);
+      console.log(result);
       const { status, message, data } = result;
       if (status === 200) {
         return data;

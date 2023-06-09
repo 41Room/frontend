@@ -24,7 +24,7 @@ const SignupInit = {
   name: '',
   pwd: '',
   wallet: '',
-  buildingId: '',
+  buildingId: '10351335-4b10-4611-a11d-61bf2ac869f2',
   dong: '',
   ho: '',
 };
@@ -60,9 +60,8 @@ function Signup() {
 
       switch (signupInfo.type) {
         case '0':
-          // 구현 필요
           const tenantInfo = {
-            building_id: '10351335-4b10-4611-a11d-61bf2ac869f2',
+            building_id: signupInfo.buildingId,
             tenant_login_id: signupInfo.email,
             tenant_login_pw: signupInfo.pwd,
             tenant_nm: signupInfo.name,
@@ -81,9 +80,8 @@ function Signup() {
           }
           return false;
         case '1':
-          // 구현 필요
           const agentInfo = {
-            building_id: '10351335-4b10-4611-a11d-61bf2ac869f2',
+            building_id: signupInfo.buildingId,
             agent_login_id: signupInfo.email,
             agent_login_pw: signupInfo.pwd,
             agent_nm: signupInfo.name,

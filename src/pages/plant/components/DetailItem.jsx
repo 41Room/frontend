@@ -33,6 +33,8 @@ function DetailItem(props) {
       try {
         const result = await ReviewAPI.getReviewList(plant_id);
 
+        console.log(stateValue);
+
         if (result) {
           setReviewList(result);
         }
@@ -71,7 +73,7 @@ function DetailItem(props) {
       <figure className="mb-6">
         <img
           className="w-full rounded-sm"
-          src={plant_img}
+          src={stateValue?.plant_img}
           width="640"
           height="360"
           style={{

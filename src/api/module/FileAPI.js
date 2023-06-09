@@ -1,3 +1,4 @@
+import axios from 'axios';
 import ApiManager from '../../utils/APIManager';
 import APIConstant from '../APIConstant';
 const $http = new ApiManager();
@@ -11,8 +12,17 @@ const FileAPI = {
    */
   uploadImg: async (imgInfo) => {
     try {
+      const formData = new FormData();
+      formData.append('file', imgInfo.file);
+      formData.append('file_path', imgInfo.file_path);
+
       const url = APIConstant.UPLOAD_IMG;
-      const result = await $http.post(url, imgInfo);
+      const { data: result } = await axios.post(url, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
       const { status, message, data } = result;
 
       if (status === 200) {

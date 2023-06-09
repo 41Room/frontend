@@ -77,9 +77,7 @@ const SessionManager = ({ children }) => {
     handleSession(sess);
   }, [session]);
 
-  useEffect(() => {
-    console.log(address);
-  }, [isConnected]);
+  useEffect(() => {}, [isConnected]);
 
   /* Render */
   return (
