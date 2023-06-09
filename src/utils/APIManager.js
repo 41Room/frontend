@@ -166,7 +166,6 @@ export default class ApiManager {
           'Access-Control-Allow-Origin': '*', // Required for CORS support to work
           'Access-Control-Allow-Credentials': true, // Required for cookies, authorization headers with HTTPS
           'content-type': 'multipart/form-data',
-          boundary: '----WebKitFormBoundaryIn312MOjBWdkffIM',
         },
         processData: false,
         contentType: false,

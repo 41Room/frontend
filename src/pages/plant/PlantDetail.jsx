@@ -21,11 +21,14 @@ function PlantDetail(props) {
   /* Hooks */
   // Plant Detail 정보 가져오기
   useEffect(() => {
+    console.log(plant_id);
     const getDetail = async () => {
       try {
         const result = await PlantAPI.getPlant(plant_id);
+        console.log(result);
 
         if (result) {
+          console.log(result);
           setDetailInfo(result);
         }
       } catch (e) {
@@ -35,7 +38,7 @@ function PlantDetail(props) {
     };
 
     getDetail();
-  }, []);
+  }, [plant_id]);
 
   /* Functions */
 

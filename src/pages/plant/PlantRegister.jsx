@@ -1,29 +1,25 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import Sidebar from '../../partials/Sidebar';
 import Header from '../../partials/Header';
 import { usePlant } from 'utils/PlantManager';
 
-import { PlantAPI } from 'api';
-
-import ProductImage01 from '../../images/related-product-01.jpg';
-import ProductImage02 from '../../images/related-product-02.jpg';
-import ProductImage03 from '../../images/related-product-03.jpg';
-
-import AppImage01 from '../../images/applications-image-01.jpg';
+import { BuildingAPI, PlantAPI } from 'api';
 
 import ContentItem from './components/ContentItem';
 import InputText from '../../components/InputType/InputText';
 import TextArea from '../../components/InputType/TextArea';
 import InputImg from '../../components/InputType/InputImg';
 import FileAPI from 'api/module/FileAPI';
+import InputSelect from 'components/InputType/InputSelect';
+import { useSession } from 'utils/SessionManager';
 
 const registerInit = {
   buildingId: '',
   name: '',
   desc: '',
-  img: '',
+  img: null,
   fee: 0,
 };
 
@@ -32,37 +28,69 @@ function PlantRegister() {
   const navigate = useNavigate();
 
   /* State */
+  const { session } = useSession();
+  const [buildingList, setBuildingList] = useState();
   const { plantList, setPlantList } = usePlant();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [registerInfo, setRegisterInfo] = useState(registerInit);
+  const [file, setFile] = useState(null);
 
   /* Hooks */
+  useEffect(() => {
+    const getBuildingList = async (e) => {
+      try {
+        const result = await BuildingAPI.getBuildingList();
+
+        if (result) {
+          setBuildingList(result);
+        }
+      } catch (e) {
+        console.log(e);
+        throw e;
+      }
+    };
+
+    getBuildingList();
+  }, []);
 
   /* Functions */
-  // Form제출( API 호출 )
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // *ISSUE* IMG올리는 처리 해야함
-    // if (!uploadImg(registerInfo.img)) {
-    //   return;
-    // }
+    if (
+      (registerInfo.buildingId === '',
+      registerInfo.name === '',
+      registerInfo.desc === '',
+      registerInfo.img === '',
+      registerInfo.fee === 0)
+    ) {
+      alert('필수 항목을 입력하세요 !');
+      return;
+    }
+
+    const checkImg = await uploadImg(registerInfo.img);
+
+    if (checkImg === '') {
+      return;
+    }
+
     try {
-      console.log('시설 등록');
       const plantInfo = {
-        building_id: 'dbaba46e-d409-4f36-ba37-eac697e5e0f7',
+        building_id: registerInfo.buildingId,
         plant_nm: registerInfo.name,
         plant_desc: registerInfo.desc,
-        plant_img: registerInfo.img,
+        plant_img: `https://api-41room.islab.dev${checkImg}`,
         plant_fee: parseInt(registerInfo.fee),
       };
+
       const result = await PlantAPI.createPlant(plantInfo);
 
-      console.log('Result');
-      console.log(result);
-
       if (result) {
-        navigate('/plant/' + result.building_id);
+        console.log('result');
+        console.log(result);
+        navigate('/plant/' + result.plant_id);
+      } else {
+        // *ISSUE* 이미지 삭제 처리가 필요함
       }
     } catch (e) {
       console.log(e);
@@ -71,38 +99,27 @@ function PlantRegister() {
 
   // Server에 Img 저장
   // *ISSUE* IMG올리는 처리 해야함
-  const uploadImg = async (imgFile) => {
+  const uploadImg = async (e) => {
     try {
-      const obj = {
-        File: { name: '손그림.png', id: 1, a: 1, b: 2 },
-      };
-
-      console.log('Test');
-      console.log(obj);
-      console.log(obj.File);
+      const formData = new FormData();
 
       const imgInfo = {
-        file: imgFile,
+        file: registerInfo.img,
         file_path: 'uploads/users',
       };
 
-      console.log('Original');
-      console.log(imgFile);
-      console.log('imgInfo');
-      console.log(imgInfo);
-
       const result = await FileAPI.uploadImg(imgInfo);
 
-      if (result) {
-        console.log('Img Result');
-        console.log(result);
-      }
+      console.log('HERE');
+      console.log(result);
 
-      return true;
+      if (result) {
+        return result;
+      }
     } catch (e) {
       console.log(e);
     }
-    return false;
+    return '';
   };
 
   /* Render */
@@ -155,11 +172,12 @@ function PlantRegister() {
                         {/* 2nd row */}
                         <div className="md:flex space-y-4 md:space-y-0 md:space-x-4">
                           <InputText
-                            Name="빌딩 ID"
-                            divCN="flex-1"
+                            Name="담당 빌딩"
                             inputName="buildingId"
                             stateValue={registerInfo}
                             setStateValue={setRegisterInfo}
+                            defaultValue={session.building_id}
+                            readOnly={true}
                           />
                           <InputImg
                             Name="사진 첨부"
@@ -167,6 +185,8 @@ function PlantRegister() {
                             inputName="img"
                             stateValue={registerInfo}
                             setStateValue={setRegisterInfo}
+                            file={file}
+                            setFile={setFile}
                           />
                         </div>
 
@@ -186,6 +206,7 @@ function PlantRegister() {
                             type="submit"
                             className="btn bg-white border-slate-200 hover:border-slate-300 text-indigo-500"
                             onClick={handleSubmit}
+                            // onClick={uploadImg}
                           >
                             시설 등록
                           </button>

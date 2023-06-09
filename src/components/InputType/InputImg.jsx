@@ -14,6 +14,8 @@ function InputImg(props) {
     inputType = 'file',
     stateValue,
     setStateValue,
+    file,
+    setFile,
   } = props;
 
   /* Hooks */

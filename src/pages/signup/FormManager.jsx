@@ -1,15 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import InputText from '../../components/InputType/InputText';
+import InputSelect from 'components/InputType/InputSelect';
+import { BuildingAPI } from 'api';
 
 function FormManager(props) {
   /* Router */
+
   /* State */
   const { signupValue, functions } = props;
   const { signupInfo, setSignupInfo } = signupValue;
-  const { nextStep, handleSubmit } = functions;
+  const { handleSubmit } = functions;
+  const [buildingList, setBuildingList] = useState();
+
   /* Hooks */
+  useEffect(() => {
+    const getBuildingList = async (e) => {
+      try {
+        const result = await BuildingAPI.getBuildingList();
+
+        if (result) {
+          setBuildingList(result);
+        }
+      } catch (e) {
+        console.log(e);
+        throw e;
+      }
+    };
+
+    getBuildingList();
+  }, []);
 
   /* Functions */
 
@@ -23,7 +44,12 @@ function FormManager(props) {
           stateValue={signupInfo}
           setStateValue={setSignupInfo}
         />
-        <InputText Name="이름" inputName="name" signupValue={signupValue} />
+        <InputText
+          Name="이름"
+          inputName="name"
+          stateValue={signupInfo}
+          setStateValue={setSignupInfo}
+        />
         <InputText
           Name="비밀번호"
           inputName="pwd"
@@ -44,9 +70,10 @@ function FormManager(props) {
           stateValue={signupInfo}
           setStateValue={setSignupInfo}
         />
-        <InputText
-          Name="입주 건물 고유 번호"
+        <InputSelect
+          Name="거주 빌딩"
           inputName="buildingId"
+          optionList={buildingList}
           stateValue={signupInfo}
           setStateValue={setSignupInfo}
         />
