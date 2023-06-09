@@ -200,6 +200,19 @@ const FILE_API = {
   UPLOAD_IMG: `${BASE_URL}/file`,
 };
 
+const WEB3_API = {
+  /**
+   * @method POST
+   * @param
+   */
+  TRANSFER_TOKEN: `${BASE_URL}/web3/transfer`,
+  /**
+   * @method POST
+   * @param
+   */
+  TRANSFER_NFT: `${BASE_URL}/web3/transfer/nft`,
+};
+
 const APIConstant = {
   ...AUTH_API,
   ...BUILDING_API,
@@ -209,6 +222,7 @@ const APIConstant = {
   ...VOTE_API,
   ...REPLY_API,
   ...FILE_API,
+  ...WEB3_API,
 };
 
 export default APIConstant;

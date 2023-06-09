@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import FinancialExchangePresenter from './FinancialExchangePresenter';
 import { useSession } from 'utils/SessionManager';
-import { CommonAPI } from 'api';
+import { CommonAPI, Web3API } from 'api';
 
 const FinancialExchangeContainer = () => {
   /* Router */
@@ -27,7 +27,14 @@ const FinancialExchangeContainer = () => {
    * @param {*} val
    */
   const handleExchange = async (val) => {
-    console.log(val);
+    const result = await Web3API.transferToken({
+      to: session?.wallet_id,
+      amount: val,
+    });
+    if (result) {
+      return true;
+    }
+    return false;
   };
   /* Hooks */
   useEffect(() => {
