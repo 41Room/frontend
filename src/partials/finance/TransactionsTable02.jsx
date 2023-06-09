@@ -11,91 +11,87 @@ import Image07 from '../../images/transactions-image-06.svg';
 import Image08 from '../../images/transactions-image-07.svg';
 import Image09 from '../../images/transactions-image-08.svg';
 
-function TransactionsTable02({
-  selectedItems,
-  setTransactionPanelOpen
-}) {
-
+function TransactionsTable02({ selectedItems, setTransactionPanelOpen }) {
   const transactions = [
     {
       id: '0',
       image: Image01,
       name: 'Form Builder CP',
-      date: '22/01/2022',
+      date: '09/06/2023',
       status: 'Pending',
-      amount: '-$1,299.22',
+      amount: '-1,299(41R)',
     },
     {
       id: '1',
       image: Image02,
       name: 'Imperial Hotel ****',
-      date: '22/01/2022',
+      date: '09/06/2023',
       status: 'Completed',
-      amount: '-$1,029.77',
+      amount: '-1,029(41R)',
     },
     {
       id: '2',
       image: Image03,
       name: 'Aprilynne Pills',
-      date: '22/01/2022',
+      date: '09/06/2023',
       status: 'Pending',
-      amount: '+$499.99',
+      amount: '+499(41R)',
     },
     {
       id: '3',
       image: Image04,
       name: 'Google Limited UK',
-      date: '22/01/2022',
+      date: '09/06/2023',
       status: 'Completed',
-      amount: '-$1,029.77',
+      amount: '-1,029(41R)',
     },
     {
       id: '4',
       image: Image05,
       name: 'Acme LTD UK',
-      date: '22/01/2022',
-      status: 'Pending',
-      amount: '+$2,179.36',
+      date: '09/06/2023',
+      status: 'Completed',
+      amount: '+2,179(41R)',
     },
     {
       id: '5',
       image: Image04,
       name: 'Google Limited UK',
-      date: '22/01/2022',
+      date: '09/06/2023',
       status: 'Canceled',
-      amount: '-$1,029.77',
+      amount: '-1,029(41R)',
     },
     {
       id: '6',
       image: Image06,
       name: 'Uber',
-      date: '22/01/2022',
+      date: '09/06/2023',
       status: 'Completed',
-      amount: '-$272.88',
+      amount: '-272(41R)',
     },
     {
       id: '7',
       image: Image07,
       name: 'PublicOne Inc.',
-      date: '22/01/2022',
+      date: '09/06/2023',
       status: 'Completed',
-      amount: '-$199.87',
+      amount: '-199(41R)',
     },
     {
       id: '8',
       image: Image08,
       name: 'Github Inc.',
-      date: '22/01/2022',
+      date: '09/06/2023',
       status: 'Completed',
-      amount: '-$42.87',
+      amount: '-42(41R)',
     },
     {
       id: '9',
       image: Image09,
       name: 'Form Builder PRO',
-      date: '22/01/2022',
+      date: '09/06/2023',
       status: 'Completed',
-      amount: '-$112.44',
+      amount: '-112(41R)',
     },
   ];
 
@@ -105,29 +101,29 @@ function TransactionsTable02({
 
   useEffect(() => {
     setList(transactions);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
-    setIsCheck(list.map(li => li.id));
+    setIsCheck(list.map((li) => li.id));
     if (selectAll) {
       setIsCheck([]);
     }
   };
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     const { id, checked } = e.target;
     setSelectAll(false);
     setIsCheck([...isCheck, id]);
     if (!checked) {
-      setIsCheck(isCheck.filter(item => item !== id));
+      setIsCheck(isCheck.filter((item) => item !== id));
     }
   };
 
   useEffect(() => {
     selectedItems(isCheck);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isCheck]);
 
   return (
@@ -143,7 +139,12 @@ function TransactionsTable02({
                   <div className="flex items-center">
                     <label className="inline-flex">
                       <span className="sr-only">Select all</span>
-                      <input className="form-checkbox" type="checkbox" checked={selectAll} onChange={handleSelectAll} />
+                      <input
+                        className="form-checkbox"
+                        type="checkbox"
+                        checked={selectAll}
+                        onChange={handleSelectAll}
+                      />
                     </label>
                   </div>
                 </th>

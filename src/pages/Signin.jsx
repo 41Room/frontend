@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import AuthImage from '../images/auth-image.jpg';
 import AuthDecoration from '../images/auth-decoration.png';
-import MetamaskIcon from '../images/metamask.png';
+import MetamaskIcon from 'images/metamask.png';
 import { useConnect, useDisconnect, useAccount } from 'wagmi';
 import AuthApi from '../api/module/AuthAPI';
 import { useSession } from '../utils/SessionManager';

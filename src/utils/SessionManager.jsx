@@ -2,7 +2,8 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { checkSession, getCookie, logout, setCookie } from '.';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAccount, useConnect, useDisconnect, useNetwork } from 'wagmi';
-import { useSwitchNetwork } from 'wagmi';
+import {} from 'wagmi';
+import { Web3API } from 'api';
 // import { switchNetwork } from '@wagmi/core';
 
 const SessionContext = createContext(null);
@@ -38,7 +39,7 @@ const SessionManager = ({ children }) => {
       setSession(val);
       setIsSession(true);
       setCookie('41ROOM', JSON.stringify(val), 1);
-      checkMetamask();
+      checkMetamask(val);
 
       return true;
     } catch (error) {
@@ -46,9 +47,10 @@ const SessionManager = ({ children }) => {
     }
   };
 
-  const checkMetamask = async (addr) => {
+  const checkMetamask = async (s) => {
     const [metamask] = connectors;
     connect({ connector: metamask });
+    await handleBalance(s);
   };
 
   const handleLogout = () => {
@@ -58,6 +60,15 @@ const SessionManager = ({ children }) => {
     }
     navigate('/signin');
     location.reload();
+  };
+
+  const handleBalance = async (val) => {
+    const result = await Web3API.getTokenBalance(val.wallet_id);
+    if (result) {
+      setSession({ ...val, balance: result * Math.pow(10, 18) });
+      return true;
+    }
+    return false;
   };
 
   /* Hooks */
@@ -73,7 +84,6 @@ const SessionManager = ({ children }) => {
       }
     }
     const sess = JSON.parse(getCookie('41ROOM'));
-
     handleSession(sess);
   }, [session]);
 
@@ -87,6 +97,7 @@ const SessionManager = ({ children }) => {
         handleSession,
         session,
         logout: handleLogout,
+        handleBalance,
       }}
     >
       {children}

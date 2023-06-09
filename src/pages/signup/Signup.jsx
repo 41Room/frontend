@@ -10,7 +10,465 @@ import SignupType from './SignupType';
 import SignupForm from './SignupForm';
 import SignupResult from './SignupResult';
 import AuthApi from '../../api/module/AuthAPI';
-
+import { useLoading } from 'hooks/useLoading';
+import {
+  useContractWrite,
+  usePrepareContractWrite,
+  useWaitForTransaction,
+} from 'wagmi';
+const NFT_ADDR = '0x8Ffbb27E1edeDa26e3ac55826ddCE8AF3a9b3C2d';
+const NFT_ABI = [
+  {
+    inputs: [],
+    stateMutability: 'nonpayable',
+    type: 'constructor',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'owner',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'approved',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256',
+      },
+    ],
+    name: 'Approval',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'owner',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'operator',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'bool',
+        name: 'approved',
+        type: 'bool',
+      },
+    ],
+    name: 'ApprovalForAll',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: '_fromTokenId',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: '_toTokenId',
+        type: 'uint256',
+      },
+    ],
+    name: 'BatchMetadataUpdate',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: '_tokenId',
+        type: 'uint256',
+      },
+    ],
+    name: 'MetadataUpdate',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'from',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'to',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256',
+      },
+    ],
+    name: 'Transfer',
+    type: 'event',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'to',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256',
+      },
+    ],
+    name: 'approve',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'owner',
+        type: 'address',
+      },
+    ],
+    name: 'balanceOf',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256',
+      },
+    ],
+    name: 'burn',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getApproved',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getTokenInfo',
+    outputs: [
+      {
+        internalType: 'string',
+        name: 'name',
+        type: 'string',
+      },
+      {
+        internalType: 'string',
+        name: 'description',
+        type: 'string',
+      },
+      {
+        internalType: 'string',
+        name: 'uri',
+        type: 'string',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getTotalMintCount',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'owner',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'operator',
+        type: 'address',
+      },
+    ],
+    name: 'isApprovedForAll',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'name',
+    outputs: [
+      {
+        internalType: 'string',
+        name: '',
+        type: 'string',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256',
+      },
+    ],
+    name: 'ownerOf',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'to',
+        type: 'address',
+      },
+      {
+        internalType: 'string',
+        name: 'uri',
+        type: 'string',
+      },
+      {
+        internalType: 'string',
+        name: 'name',
+        type: 'string',
+      },
+      {
+        internalType: 'string',
+        name: 'description',
+        type: 'string',
+      },
+    ],
+    name: 'safeMint',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'from',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'to',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256',
+      },
+    ],
+    name: 'safeTransferFrom',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'from',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'to',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'bytes',
+        name: 'data',
+        type: 'bytes',
+      },
+    ],
+    name: 'safeTransferFrom',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'operator',
+        type: 'address',
+      },
+      {
+        internalType: 'bool',
+        name: 'approved',
+        type: 'bool',
+      },
+    ],
+    name: 'setApprovalForAll',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'bytes4',
+        name: 'interfaceId',
+        type: 'bytes4',
+      },
+    ],
+    name: 'supportsInterface',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'symbol',
+    outputs: [
+      {
+        internalType: 'string',
+        name: '',
+        type: 'string',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256',
+      },
+    ],
+    name: 'tokenURI',
+    outputs: [
+      {
+        internalType: 'string',
+        name: '',
+        type: 'string',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'from',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'to',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256',
+      },
+    ],
+    name: 'transferFrom',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+];
 /* 
   Type : 0 - 일반 사용자 / 1 - 관리인 구분
   Step : 0-Signup 1-SignupForm 2-SignupResult */
@@ -23,7 +481,7 @@ const SignupInit = {
   email: '',
   name: '',
   pwd: '',
-  wallet: '',
+  wallet_id: '',
   buildingId: '10351335-4b10-4611-a11d-61bf2ac869f2',
   dong: '',
   ho: '',
@@ -31,10 +489,32 @@ const SignupInit = {
 
 function Signup() {
   /* Router */
-
+  const contractInfo = {
+    address: NFT_ADDR,
+    abi: NFT_ABI,
+    chainId: 11155111,
+  };
   /* State */
   const [signupInfo, setSignupInfo] = useState(SignupInit);
   const { isSession, handleSession } = useSession();
+  const { handleLoading } = useLoading();
+
+  const { config } = usePrepareContractWrite({
+    ...contractInfo,
+    functionName: 'safeMint',
+    args: [
+      signupInfo.wallet_id,
+      'uploads/41room.png',
+      signupInfo.buildingId,
+      `${signupInfo.dong}동 ${signupInfo.ho}호 ${signupInfo.name}님의 NFT}`,
+    ],
+  });
+
+  const { data, error, isError, write } = useContractWrite(config);
+
+  const { isLoading, isSuccess } = useWaitForTransaction({
+    hash: data?.hash,
+  });
 
   const signupValue = {
     signupInfo,
@@ -60,25 +540,9 @@ function Signup() {
 
       switch (signupInfo.type) {
         case '0':
-          const tenantInfo = {
-            building_id: signupInfo.buildingId,
-            tenant_login_id: signupInfo.email,
-            tenant_login_pw: signupInfo.pwd,
-            tenant_nm: signupInfo.name,
-            tenant_dong: signupInfo.dong,
-            tenant_ho: signupInfo.ho,
-            wallet_id: signupInfo.wallet,
-          };
-
-          const tenantResult = await AuthApi.tenantSignup(tenantInfo);
-          if (tenantResult) {
-            nextStep();
-            return true;
-          } else {
-            alert('입력값이 잘못되었습니다 !');
-            navigate('/signup');
-          }
-          return false;
+          handleLoading(true);
+          write?.();
+          return true;
         case '1':
           const agentInfo = {
             building_id: signupInfo.buildingId,
@@ -94,7 +558,6 @@ function Signup() {
             return true;
           } else {
             alert('입력값이 잘못되었습니다 !');
-            navigate('/signup');
           }
           return false;
       }
@@ -103,7 +566,58 @@ function Signup() {
     }
   };
 
+  const handleSignupTenant = async () => {
+    const tenantInfo = {
+      building_id: signupInfo.buildingId,
+      tenant_login_id: signupInfo.email,
+      tenant_login_pw: signupInfo.pwd,
+      tenant_nm: signupInfo.name,
+      tenant_dong: signupInfo.dong,
+      tenant_ho: signupInfo.ho,
+      wallet_id: signupInfo.wallet_id,
+    };
+
+    const tenantResult = await AuthApi.tenantSignup(tenantInfo);
+    if (tenantResult) {
+      handleLoading(false);
+      nextStep();
+      return true;
+    } else {
+      alert('입력값이 잘못되었습니다 !');
+    }
+  };
+
+  const handleSignupAgent = async () => {
+    const agentInfo = {
+      building_id: signupInfo.buildingId,
+      agent_login_id: signupInfo.email,
+      agent_login_pw: signupInfo.pwd,
+      agent_nm: signupInfo.name,
+      wallet_addr: signupInfo.wallet,
+    };
+
+    const agentResult = await AuthApi.agentSignup(agentInfo);
+    if (agentResult) {
+      nextStep();
+      return true;
+    } else {
+      alert('입력값이 잘못되었습니다 !');
+    }
+    return false;
+  };
+
   const functions = { handleSubmit, nextStep };
+
+  useEffect(() => {
+    if (!isSuccess) {
+      return;
+    }
+    if (signupInfo.type === '0') {
+      handleSignupTenant();
+    } else {
+      handleSignupAgent();
+    }
+  }, [isSuccess]);
 
   /* Render */
   return (

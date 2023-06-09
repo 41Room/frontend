@@ -3,7 +3,10 @@ import { Link } from 'react-router-dom';
 
 import InputText from '../../components/InputType/InputText';
 import InputSelect from 'components/InputType/InputSelect';
+import MetamaskIcon from 'images/metamask.png';
 import { BuildingAPI } from 'api';
+import { useAccount, useConnect, useDisconnect } from 'wagmi';
+import { disconnect } from '@wagmi/core';
 
 function FormUser(props) {
   /* Router */
@@ -11,7 +14,11 @@ function FormUser(props) {
   const { signupValue, functions } = props;
   const { signupInfo, setSignupInfo } = signupValue;
   const { handleSubmit } = functions;
-  const [buildingList, setBuildingList] = useState();
+  const [buildingList, setBuildingList] = useState([]);
+  const [wallet, setWallet] = useState(null);
+  const { isConnected, address } = useAccount();
+  const { connect, connectors, isLoading, pendingConnector } = useConnect();
+  const { disconnect } = useDisconnect();
 
   /* Hooks */
   useEffect(() => {
@@ -31,8 +38,22 @@ function FormUser(props) {
     getBuildingList();
   }, []);
 
-  /* Functions */
+  useEffect(() => {
+    if (!isConnected) return;
+    console.log(address);
+    setWallet(address);
+    setSignupInfo({ ...signupInfo, wallet_id: address });
+    return () => {
+      disconnect();
+    };
+  }, [isConnected]);
 
+  /* Functions */
+  const handleMetamask = (e) => {
+    e.preventDefault();
+    connect({ connector: connectors[0] });
+    console.log(address);
+  };
   /* Render */
   return (
     <form className="w-80">
@@ -63,12 +84,25 @@ function FormUser(props) {
           stateValue={signupInfo}
           setStateValue={setSignupInfo}
         />
-        <InputText
-          Name="지갑주소"
-          inputName="wallet"
-          stateValue={signupInfo}
-          setStateValue={setSignupInfo}
-        />
+
+        {wallet ? (
+          <InputText
+            Name="지갑주소"
+            inputName="wallet_id"
+            stateValue={signupInfo}
+            defaultValue={wallet}
+            setStateValue={setSignupInfo}
+          />
+        ) : (
+          <button
+            className="w-full btn bg-indigo-500 hover:bg-indigo-600 text-white "
+            onClick={handleMetamask}
+          >
+            <img src={MetamaskIcon} className="w-6 mr-5" alt="img" />
+            MetaMask로 지갑 연결
+          </button>
+        )}
+
         <InputSelect
           Name="거주 빌딩"
           inputName="buildingId"

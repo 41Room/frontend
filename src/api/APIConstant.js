@@ -211,6 +211,16 @@ const WEB3_API = {
    * @param
    */
   TRANSFER_NFT: `${BASE_URL}/web3/transfer/nft`,
+  /**
+   * @method GET
+   * @param
+   */
+  GET_BALANCE: `${BASE_URL}/web3/balance/:address`,
+  /**
+   * @method GET
+   * @param
+   */
+  GET_TOKEN_BALANCE: `${BASE_URL}/web3/token/:address`,
 };
 
 const APIConstant = {

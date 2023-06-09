@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import PayBg from 'images/pay-bg.jpg';
-import User from 'images/user-64-13.jpg';
 
 function FinancialExchangePresenter({ session, thumbnail, submit }) {
   /* Router */
   /* State */
   const [exchange, setExchange] = useState(1000);
   const [toggle, setToggle] = useState(false);
+  console.log(session);
   const won = exchange;
   const token = exchange / 1000;
   /* Functions */
@@ -170,6 +170,7 @@ function FinancialExchangePresenter({ session, thumbnail, submit }) {
               <h1 className="text-xl leading-snug text-slate-800 font-semibold mb-2">
                 Exchange 41Room Token 🔥
               </h1>
+
               <div className="text-sm">Exhange 41Room Token</div>
             </div>
 
@@ -178,6 +179,9 @@ function FinancialExchangePresenter({ session, thumbnail, submit }) {
             <div>
               <div className="space-y-4">
                 {/* Card Number */}
+                <h1 className="text-xl leading-snug text-slate-800 font-semibold mb-2">
+                  You have {Number(session?.balance).toLocaleString()} Token
+                </h1>
                 <div>
                   <label
                     className="block text-sm font-medium mb-1"

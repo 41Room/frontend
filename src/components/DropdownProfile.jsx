@@ -29,6 +29,10 @@ function DropdownProfile({ align }) {
     return () => document.removeEventListener('click', clickHandler);
   });
 
+  useEffect(() => {
+    console.log(session);
+  }, [session]);
+
   const handleLogout = () => {
     logout();
     setDropdownOpen(!dropdownOpen);
@@ -56,7 +60,8 @@ function DropdownProfile({ align }) {
         {/* <img className="w-8 h-8 rounded-full" src={UserAvatar} width="32" height="32" alt="User" /> */}
         <div className="flex items-center truncate">
           <span className="truncate ml-2 text-sm font-medium group-hover:text-slate-800">
-            {session?.user_nm}
+            {session?.user_nm} (41R: {Number(session?.balance).toLocaleString()}
+            )
           </span>
           <svg
             className="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400"

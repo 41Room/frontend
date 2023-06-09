@@ -41,6 +41,44 @@ const Web3API = {
       throw e;
     }
   },
+  /**
+   * 잔액 조회
+   * --
+   * @param {*} addr
+   * @returns
+   */
+  getBalance: async (addr) => {
+    try {
+      const url = APIConstant.GET_BALANCE.replace(':address', addr);
+      const result = await $http.get(url);
+      const { status, message, data } = result;
+      if (status === 200) {
+        return data;
+      }
+      throw message;
+    } catch (e) {
+      throw e;
+    }
+  },
+  /**
+   * 토큰 잔액 조회
+   * --
+   * @param {*} addr
+   * @returns
+   */
+  getTokenBalance: async (addr) => {
+    try {
+      const url = APIConstant.GET_TOKEN_BALANCE.replace(':address', addr);
+      const result = await $http.get(url);
+      const { status, message, data } = result;
+      if (status === 200) {
+        return data;
+      }
+      throw message;
+    } catch (e) {
+      throw e;
+    }
+  },
 };
 
 export default Web3API;
