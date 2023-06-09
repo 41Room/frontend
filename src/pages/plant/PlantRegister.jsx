@@ -17,6 +17,7 @@ import ContentItem from './components/ContentItem';
 import InputText from '../../components/InputType/InputText';
 import TextArea from '../../components/InputType/TextArea';
 import InputImg from '../../components/InputType/InputImg';
+import FileAPI from 'api/module/FileAPI';
 
 const registerInit = {
   buildingId: '',
@@ -38,8 +39,14 @@ function PlantRegister() {
   /* Hooks */
 
   /* Functions */
+  // Form제출( API 호출 )
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // *ISSUE* IMG올리는 처리 해야함
+    // if (!uploadImg(registerInfo.img)) {
+    //   return;
+    // }
     try {
       console.log('시설 등록');
       const plantInfo = {
@@ -51,12 +58,51 @@ function PlantRegister() {
       };
       const result = await PlantAPI.createPlant(plantInfo);
 
+      console.log('Result');
+      console.log(result);
+
       if (result) {
-        navigator('/plant');
+        navigate('/plant/' + result.building_id);
       }
     } catch (e) {
       console.log(e);
     }
+  };
+
+  // Server에 Img 저장
+  // *ISSUE* IMG올리는 처리 해야함
+  const uploadImg = async (imgFile) => {
+    try {
+      const obj = {
+        File: { name: '손그림.png', id: 1, a: 1, b: 2 },
+      };
+
+      console.log('Test');
+      console.log(obj);
+      console.log(obj.File);
+
+      const imgInfo = {
+        file: imgFile,
+        file_path: 'uploads/users',
+      };
+
+      console.log('Original');
+      console.log(imgFile);
+      console.log('imgInfo');
+      console.log(imgInfo);
+
+      const result = await FileAPI.uploadImg(imgInfo);
+
+      if (result) {
+        console.log('Img Result');
+        console.log(result);
+      }
+
+      return true;
+    } catch (e) {
+      console.log(e);
+    }
+    return false;
   };
 
   /* Render */
@@ -126,11 +172,6 @@ function PlantRegister() {
 
                         {/* 3th row */}
                         <div className="md:flex space-y-4 md:space-y-0 md:space-x-4">
-                          {/* {registerInfo.img != '' && (
-                            <div>
-                              <img src="" alt="" />
-                            </div>
-                          )} */}
                           <TextArea
                             Name="시설 설명"
                             divCN="flex-1"
@@ -156,7 +197,7 @@ function PlantRegister() {
               </div>
             </div>
 
-            {/* Sidebar */}
+            {/* Hot 시설 */}
             <div>
               <div className="lg:sticky lg:top-16 bg-slate-50 lg:overflow-x-hidden lg:overflow-y-auto no-scrollbar lg:shrink-0 border-t lg:border-t-0 lg:border-l border-slate-200 lg:w-[320px] xl:w-[352px] 2xl:w-[calc(352px+80px)] lg:h-[calc(100vh-64px)]">
                 <div className="py-8 px-4 lg:px-8 2xl:px-12">
@@ -165,15 +206,16 @@ function PlantRegister() {
                       Hot !!
                     </h2>
                     <div className="space-y-6">
-                      {/* Order Details */}
-                      {/* Card 1 */}
-                      <ContentItem
-                        imgSrc={plantList[0].plant_img}
-                        plantName={plantList[0].plant_nm}
-                        price={plantList[0].plant_fee}
-                        star={4.8}
-                        plantDesc={plantList[0].plant_desc}
-                      />
+                      {/* Hot 시설 */}
+                      {plantList[0] && (
+                        <ContentItem
+                          imgSrc={plantList[0].plant_img}
+                          plantName={plantList[0].plant_nm}
+                          price={plantList[0].plant_fee}
+                          star={4.8}
+                          plantDesc={plantList[0].plant_desc}
+                        />
+                      )}
                     </div>
                   </div>
                 </div>

@@ -196,7 +196,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                 </NavLink>
               </li>
 
-              {/* Dashboard */}
+              {/* Dashboard
               <li
                 className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
                   pathname.includes('dashboard') && 'bg-slate-900'
@@ -245,7 +245,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                     </div>
                   </div>
                 </NavLink>
-              </li>
+              </li> */}
 
               {/* Plant */}
               <SidebarLinkGroup
@@ -338,7 +338,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                           <li className="mb-1 last:mb-0">
                             <NavLink
                               end
-                              to="/plantregister"
+                              to="/plant/register"
                               className={({ isActive }) =>
                                 'block transition duration-150 truncate ' +
                                 (isActive
@@ -348,22 +348,6 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                             >
                               <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
                                 Register
-                              </span>
-                            </NavLink>
-                          </li>
-                          <li className="mb-1 last:mb-0">
-                            <NavLink
-                              end
-                              to="/plantdetail"
-                              className={({ isActive }) =>
-                                'block transition duration-150 truncate ' +
-                                (isActive
-                                  ? 'text-indigo-500'
-                                  : 'text-slate-400 hover:text-slate-200')
-                              }
-                            >
-                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                Detail
                               </span>
                             </NavLink>
                           </li>
@@ -380,22 +364,6 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                             >
                               <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
                                 Review
-                              </span>
-                            </NavLink>
-                          </li>
-                          <li className="mb-1 last:mb-0">
-                            <NavLink
-                              end
-                              to="/plantcomplaints"
-                              className={({ isActive }) =>
-                                'block transition duration-150 truncate ' +
-                                (isActive
-                                  ? 'text-indigo-500'
-                                  : 'text-slate-400 hover:text-slate-200')
-                              }
-                            >
-                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                Complaints
                               </span>
                             </NavLink>
                           </li>

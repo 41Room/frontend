@@ -192,6 +192,14 @@ const REPLY_API = {
   DELETE_REPLY: `${BASE_URL}/reply/:reply_id`,
 };
 
+const FILE_API = {
+  /**
+   * @method POST
+   * @param
+   */
+  UPLOAD_IMG: `${BASE_URL}/file`,
+};
+
 const APIConstant = {
   ...AUTH_API,
   ...BUILDING_API,
@@ -200,6 +208,7 @@ const APIConstant = {
   ...COMMUNITY_API,
   ...VOTE_API,
   ...REPLY_API,
+  ...FILE_API,
 };
 
 export default APIConstant;

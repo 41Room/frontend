@@ -20,12 +20,7 @@ function InputImg(props) {
 
   /* Functions */
   const handleValue = (e) => {
-    console.log('file');
-    console.log(e.target.value);
-    setStateValue({ ...stateValue, [e.target.name]: e.target.value });
-
-    console.log('Register');
-    console.log(stateValue);
+    setStateValue({ ...stateValue, [e.target.name]: e.target.files[0] });
   };
 
   /* Render */

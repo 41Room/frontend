@@ -2,11 +2,13 @@ import React from 'react';
 import Star from '../../../components/Star';
 
 import User07 from '../../../images/user-32-07.jpg';
+import { useSession } from 'utils/SessionManager';
 
 function DetailReview(props) {
   /* Router */
 
   /* State */
+  const { session } = useSession();
   const { reviewInfo, star } = props;
 
   /* Hooks */
@@ -19,8 +21,7 @@ function DetailReview(props) {
       <div className="flex items-center mb-2">
         <img
           className="w-8 h-8 rounded-full mr-3"
-          // *ISSUE* DB에 UserImg 필드가 필요함
-          src={User07}
+          src={`https://i.pravatar.cc/150?u=${session?.tenant_id}`}
           width="32"
           height="32"
           alt="img"

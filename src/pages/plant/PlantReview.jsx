@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 
 import Sidebar from '../../partials/Sidebar';
 import Header from '../../partials/Header';
-import { PlantAPI } from 'api';
-import { Link, useParams } from 'react-router-dom';
+import { PlantAPI, ReviewAPI } from 'api';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toolongText } from 'utils/Utils';
 import TextArea from 'components/InputType/TextArea';
 import InputRate from 'components/InputType/InputRate';
+import { useSession } from 'utils/SessionManager';
 
 const reviewInit = {
   plant_id: '',
@@ -18,11 +19,13 @@ const reviewInit = {
 
 function PlantReview() {
   /* Router */
+  const navigate = useNavigate();
 
   /* State */
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const params = useParams();
   const { plant_id } = params;
+  const { session } = useSession();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [reviewInfo, setReviewInfo] = useState(reviewInit);
 
   /* Hooks */
@@ -49,14 +52,31 @@ function PlantReview() {
   }, []);
 
   /* Functions */
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
     if (reviewInfo.star === 0 || reviewInfo.review === '') {
       alert('모든 항목을 입력해주세요');
       return;
     }
 
-    console.log('제출 데이타');
-    console.log(reviewInfo);
+    try {
+      const Review = {
+        plant_id: reviewInfo.plant_id,
+        tenant_id: session.tenant_id,
+        review_content: reviewInfo.review,
+        review_grade: reviewInfo.star,
+      };
+
+      const result = await ReviewAPI.createReview(Review);
+
+      if (result) {
+        navigate('/plant/' + plant_id);
+      }
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
   };
 
   /* Render */
