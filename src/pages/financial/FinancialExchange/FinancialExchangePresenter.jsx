@@ -57,7 +57,7 @@ function FinancialExchangePresenter({ session, thumbnail, submit }) {
     if (!toggle) {
       return;
     }
-    const result = submit();
+    const result = submit(exchange / 1000);
     if (result) {
       return true;
     }
