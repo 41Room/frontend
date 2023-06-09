@@ -22,8 +22,8 @@ const SessionManager = ({ children }) => {
   const [isSession, setIsSession] = useState(false);
   const [session, setSession] = useState(null);
   const { connect, connectors } = useConnect();
+  const { chains } = useNetwork();
   const { isConnected, address, connector } = useAccount();
-  const network = useSwitchNetwork();
   const { disconnect } = useDisconnect();
 
   /* Functions */
@@ -35,6 +35,7 @@ const SessionManager = ({ children }) => {
       setSession(val);
       setIsSession(true);
       setCookie('41ROOM', JSON.stringify(val), 1);
+      checkMetamask();
 
       return true;
     } catch (error) {
@@ -49,6 +50,7 @@ const SessionManager = ({ children }) => {
 
   const handleLogout = () => {
     logout();
+    console.log(isConnected);
     if (isConnected) {
       disconnect();
     }
@@ -58,7 +60,6 @@ const SessionManager = ({ children }) => {
 
   /* Hooks */
   useEffect(() => {
-    checkMetamask();
     if (session) {
       return;
     }

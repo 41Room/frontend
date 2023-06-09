@@ -7,22 +7,6 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
   const location = useLocation();
   const { pathname } = location;
 
-  const sidebarItem = [
-    {
-      id: '0',
-      name: 'home',
-      displayName: 'Home',
-      path: '/',
-      subItem: [
-        {
-          subId: '0',
-          name: 'Test',
-          path: '/test',
-        },
-      ],
-    },
-  ];
-
   const trigger = useRef(null);
   const sidebar = useRef(null);
 
@@ -500,10 +484,10 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                               </span>
                             </NavLink>
                           </li>
-                          <li className="mb-1 last:mb-0">
+                          {/* <li className="mb-1 last:mb-0">
                             <NavLink
                               end
-                              to="/communitydetail"
+                              to="/community/"
                               className={({ isActive }) =>
                                 'block transition duration-150 truncate ' +
                                 (isActive
@@ -515,11 +499,11 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                                 Detail
                               </span>
                             </NavLink>
-                          </li>
+                          </li> */}
                           <li className="mb-1 last:mb-0">
                             <NavLink
                               end
-                              to="/communityregister"
+                              to="/community/register"
                               className={({ isActive }) =>
                                 'block transition duration-150 truncate ' +
                                 (isActive

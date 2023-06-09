@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import MeetupsThumb01 from 'images/meetups-thumb-01.jpg';
@@ -15,6 +15,7 @@ import UserImage03 from 'images/avatar-03.jpg';
 import UserImage04 from 'images/avatar-04.jpg';
 import UserImage05 from 'images/avatar-05.jpg';
 import UserImage06 from 'images/avatar-06.jpg';
+import { getRandomInt } from 'utils';
 const CommunityItem = ({ community }) => {
   /* Router */
   /* State */
@@ -24,9 +25,28 @@ const CommunityItem = ({ community }) => {
     community_content.length >= 180
       ? community_content.slice(0, 180) + '...'
       : community_content;
+
+  const avatarList = [...new Array(3)];
+  const plusNum = getRandomInt(1, 50);
   /* Functions */
   /* Hooks */
+
   /* Render */
+
+  const avatarRandom = avatarList.map((_, idx) => {
+    const num = getRandomInt();
+    return (
+      <img
+        key={`${num}${idx}`}
+        className="rounded-full border-2 border-white box-content"
+        src={`https://i.pravatar.cc/150?u=${num}`}
+        width="28"
+        height="28"
+        alt={`User ${num}`}
+      />
+    );
+  });
+
   return (
     <article className="flex bg-white shadow-lg rounded-sm border border-slate-200 overflow-hidden">
       {/* Image */}
@@ -36,7 +56,7 @@ const CommunityItem = ({ community }) => {
       >
         <img
           className="absolute object-cover object-center w-full h-full"
-          src={MeetupsThumb01}
+          src={`https://i.pravatar.cc/150?u=${community_id}`}
           width="220"
           height="236"
           alt="Meetup 01"
@@ -68,16 +88,17 @@ const CommunityItem = ({ community }) => {
         {/* Footer */}
         <div className="flex justify-between mt-3">
           {/* Tag */}
-          <div className="text-xs inline-flex items-center font-medium bg-slate-100 text-slate-600 rounded-full text-center px-2.5 py-1">
+          {/* <div className="text-xs inline-flex items-center font-medium bg-slate-100 text-slate-600 rounded-full text-center px-2.5 py-1">
             <svg className="w-4 h-3 fill-slate-400 mr-2" viewBox="0 0 16 12">
               <path d="m16 2-4 2.4V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7.6l4 2.4V2ZM2 10V2h8v8H2Z" />
             </svg>
             <span>Online Event</span>
-          </div>
+          </div> */}
           {/* Avatars */}
           <div className="flex items-center space-x-2">
             <div className="flex -space-x-3 -ml-0.5">
-              <img
+              {avatarRandom}
+              {/* <img
                 className="rounded-full border-2 border-white box-content"
                 src={UserImage01}
                 width="28"
@@ -97,9 +118,11 @@ const CommunityItem = ({ community }) => {
                 width="28"
                 height="28"
                 alt="User 05"
-              />
+              /> */}
             </div>
-            <div className="text-xs font-medium text-slate-400 italic">+22</div>
+            <div className="text-xs font-medium text-slate-400 italic">
+              +{plusNum}
+            </div>
           </div>
         </div>
       </div>

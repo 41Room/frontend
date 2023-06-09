@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import Sidebar from 'partials/Sidebar';
 import Header from 'partials/Header';
@@ -20,72 +20,61 @@ import UserImage08 from 'images/user-32-08.jpg';
 import Avatar02 from 'images/avatar-02.jpg';
 import Avatar03 from 'images/avatar-03.jpg';
 import Avatar04 from 'images/avatar-04.jpg';
-import { CommunityAPI } from 'api';
+import { useSession } from 'utils/SessionManager';
+import { getRandomInt } from 'utils';
 
-const CommunityDetailPresenter = () => {
+const CommunityDetailPresenter = ({ community, thumbnail, userList }) => {
   /* Router */
-  const { community_id } = useParams();
   /* State */
-  const [community, setCommunity] = useState();
+  const { session, isSession } = useSession();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  /* Functions */
-  const handleCommunityInfo = async () => {
-    const result = await CommunityAPI.getCommunity(community_id);
-    if (result) {
-      setCommunity(result);
-      return true;
-    }
-    setCommunity(null);
-    return false;
-  };
-  /* Hooks */
-  useEffect(() => {
-    if (!community_id) {
-      return;
-    }
-    handleCommunityInfo();
-  }, [community_id]);
+  const [moreNum, setMoreNum] = useState(20);
 
+  /* Functions */
+  /* Hooks */
   /* Render */
-  const contentRender = community?.community_content.split('\n').map((line) => {
-    return <p className="mb-6">{line}</p>;
-  });
+  const contentRender = community?.community_content
+    .split('\n')
+    .map((line, idx) => {
+      return (
+        <p className="mb-6" key={idx}>
+          {line}
+        </p>
+      );
+    });
 
   const voteRender = community?.vote.map((item, idx) => {
     const { vote_id, vote_title, vote_description } = item;
     return (
-      <>
-        <div key={vote_id}>
-          <h2 className="text-xl leading-snug text-slate-800 font-bold mb-2">
-            Vote {idx + 1}
-          </h2>
-          <ul className="space-y-5 my-6">
-            <li className="flex items-start">
-              <div className="grow">
-                <div className="text-2xl font-semibold text-slate-800 mb-2">
-                  {vote_title}
-                </div>
-                <div className="italic">{vote_description}</div>
+      <div key={vote_id}>
+        <h2 className="text-xl leading-snug text-slate-800 font-bold mb-2">
+          Vote {idx + 1}
+        </h2>
+        <ul className="space-y-5 my-6">
+          <li className="flex items-start">
+            <div className="grow">
+              <div className="text-2xl font-semibold text-slate-800 mb-2">
+                {vote_title}
               </div>
-            </li>
-            <li className="flex items-start">
-              <div className="italic w-full">
-                <button className="w-full pt-5 pb-5 btn border-slate-200 hover:border-slate-300 text-indigo-500 bg-white">
-                  Yes
-                </button>
-              </div>
-            </li>
-            <li className="flex items-start">
-              <div className="italic w-full">
-                <button className="w-full pt-5 pb-5 btn border-slate-200 hover:border-slate-300 text-indigo-500 bg-white">
-                  No
-                </button>
-              </div>
-            </li>
-          </ul>
-        </div>
-        <hr className="my-6 border-t border-slate-200" />
-      </>
+              <div className="italic">{vote_description}</div>
+            </div>
+          </li>
+          <li className="flex items-start">
+            <div className="italic w-full">
+              <button className="w-full pt-5 pb-5 btn border-slate-200 hover:border-slate-300 text-indigo-500 bg-white">
+                Yes
+              </button>
+            </div>
+          </li>
+          <li className="flex items-start">
+            <div className="italic w-full">
+              <button className="w-full pt-5 pb-5 btn border-slate-200 hover:border-slate-300 text-indigo-500 bg-white">
+                No
+              </button>
+            </div>
+          </li>
+        </ul>
+      </div>
     );
   });
 
@@ -112,6 +101,40 @@ const CommunityDetailPresenter = () => {
               return line;
             })}
           </div>
+        </div>
+      </li>
+    );
+  });
+
+  const avatarListRender = userList.slice(0, moreNum).map((item) => {
+    const { id, first_name, last_name, email } = item;
+    return (
+      <li key={id}>
+        <div className="flex justify-between">
+          <div className="grow flex items-center">
+            <div className="relative mr-3">
+              <img
+                className="w-8 h-8 rounded-full"
+                src={`https://i.pravatar.cc/150?u=${email}`}
+                width="32"
+                height="32"
+                alt="User 08"
+              />
+            </div>
+            <div className="truncate">
+              <span className="text-sm font-medium text-slate-800">
+                {first_name} {last_name}
+              </span>
+            </div>
+          </div>
+          <button className="text-slate-400 hover:text-slate-500 rounded-full">
+            <span className="sr-only">Menu</span>
+            <svg className="w-8 h-8 fill-current" viewBox="0 0 32 32">
+              <circle cx="16" cy="16" r="2" />
+              <circle cx="10" cy="16" r="2" />
+              <circle cx="22" cy="16" r="2" />
+            </svg>
+          </button>
         </div>
       </li>
     );
@@ -168,7 +191,7 @@ const CommunityDetailPresenter = () => {
                     <a className="block mr-2 shrink-0" href="#0">
                       <img
                         className="rounded-full"
-                        src={UserImage07}
+                        src={`https://i.pravatar.cc/150?u=${session?.tenant_id}`}
                         width="32"
                         height="32"
                         alt="User 04"
@@ -202,10 +225,10 @@ const CommunityDetailPresenter = () => {
                 {/* Image */}
                 <figure className="mb-6">
                   <img
-                    className="w-full rounded-sm"
-                    src={MeetupImage}
-                    width="640"
-                    height="360"
+                    className="w-full rounded-sm object-cover"
+                    src={thumbnail}
+                    // width="640"
+                    // height="360"
                     alt="Meetup"
                   />
                 </figure>
@@ -221,6 +244,8 @@ const CommunityDetailPresenter = () => {
 
                 {/* Comments */}
                 {voteRender}
+
+                <hr className="my-6 border-t border-slate-200" />
 
                 {/* Comments */}
                 <div>
@@ -261,7 +286,7 @@ const CommunityDetailPresenter = () => {
                 <div className="bg-white p-5 shadow-lg rounded-sm border border-slate-200 lg:w-72 xl:w-80">
                   <div className="flex justify-between space-x-1 mb-5">
                     <div className="text-sm text-slate-800 font-semibold">
-                      Attendees (127)
+                      Attendees ({userList.length})
                     </div>
                     <a
                       className="text-sm font-medium text-indigo-500 hover:text-indigo-600"
@@ -271,225 +296,14 @@ const CommunityDetailPresenter = () => {
                     </a>
                   </div>
                   <ul className="space-y-3">
+                    {avatarListRender}
                     <li>
-                      <div className="flex justify-between">
-                        <div className="grow flex items-center">
-                          <div className="relative mr-3">
-                            <img
-                              className="w-8 h-8 rounded-full"
-                              src={UserImage08}
-                              width="32"
-                              height="32"
-                              alt="User 08"
-                            />
-                          </div>
-                          <div className="truncate">
-                            <span className="text-sm font-medium text-slate-800">
-                              Carolyn McNeail
-                            </span>
-                          </div>
-                        </div>
-                        <button className="text-slate-400 hover:text-slate-500 rounded-full">
-                          <span className="sr-only">Menu</span>
-                          <svg
-                            className="w-8 h-8 fill-current"
-                            viewBox="0 0 32 32"
-                          >
-                            <circle cx="16" cy="16" r="2" />
-                            <circle cx="10" cy="16" r="2" />
-                            <circle cx="22" cy="16" r="2" />
-                          </svg>
-                        </button>
-                      </div>
-                    </li>
-                    <li>
-                      <div className="flex justify-between">
-                        <div className="grow flex items-center">
-                          <div className="relative mr-3">
-                            <img
-                              className="w-8 h-8 rounded-full"
-                              src={UserImage01}
-                              width="32"
-                              height="32"
-                              alt="User 01"
-                            />
-                          </div>
-                          <div className="truncate">
-                            <span className="text-sm font-medium text-slate-800">
-                              Dominik Lamakani
-                            </span>
-                          </div>
-                        </div>
-                        <button className="text-slate-400 hover:text-slate-500 rounded-full">
-                          <span className="sr-only">Menu</span>
-                          <svg
-                            className="w-8 h-8 fill-current"
-                            viewBox="0 0 32 32"
-                          >
-                            <circle cx="16" cy="16" r="2" />
-                            <circle cx="10" cy="16" r="2" />
-                            <circle cx="22" cy="16" r="2" />
-                          </svg>
-                        </button>
-                      </div>
-                    </li>
-                    <li>
-                      <div className="flex justify-between">
-                        <div className="grow flex items-center">
-                          <div className="relative mr-3">
-                            <img
-                              className="w-8 h-8 rounded-full"
-                              src={UserImage03}
-                              width="32"
-                              height="32"
-                              alt="User 03"
-                            />
-                          </div>
-                          <div className="truncate">
-                            <span className="text-sm font-medium text-slate-800">
-                              Ivan Mesaros
-                            </span>
-                          </div>
-                        </div>
-                        <button className="text-slate-400 hover:text-slate-500 rounded-full">
-                          <span className="sr-only">Menu</span>
-                          <svg
-                            className="w-8 h-8 fill-current"
-                            viewBox="0 0 32 32"
-                          >
-                            <circle cx="16" cy="16" r="2" />
-                            <circle cx="10" cy="16" r="2" />
-                            <circle cx="22" cy="16" r="2" />
-                          </svg>
-                        </button>
-                      </div>
-                    </li>
-                    <li>
-                      <div className="flex justify-between">
-                        <div className="grow flex items-center">
-                          <div className="relative mr-3">
-                            <img
-                              className="w-8 h-8 rounded-full"
-                              src={UserImage05}
-                              width="32"
-                              height="32"
-                              alt="User 05"
-                            />
-                          </div>
-                          <div className="truncate">
-                            <span className="text-sm font-medium text-slate-800">
-                              Maria Martinez
-                            </span>
-                          </div>
-                        </div>
-                        <button className="text-slate-400 hover:text-slate-500 rounded-full">
-                          <span className="sr-only">Menu</span>
-                          <svg
-                            className="w-8 h-8 fill-current"
-                            viewBox="0 0 32 32"
-                          >
-                            <circle cx="16" cy="16" r="2" />
-                            <circle cx="10" cy="16" r="2" />
-                            <circle cx="22" cy="16" r="2" />
-                          </svg>
-                        </button>
-                      </div>
-                    </li>
-                    <li>
-                      <div className="flex justify-between">
-                        <div className="grow flex items-center">
-                          <div className="relative mr-3">
-                            <img
-                              className="w-8 h-8 rounded-full"
-                              src={UserImage05}
-                              width="32"
-                              height="32"
-                              alt="User 05"
-                            />
-                          </div>
-                          <div className="truncate">
-                            <span className="text-sm font-medium text-slate-800">
-                              Maria Martinez
-                            </span>
-                          </div>
-                        </div>
-                        <button className="text-slate-400 hover:text-slate-500 rounded-full">
-                          <span className="sr-only">Menu</span>
-                          <svg
-                            className="w-8 h-8 fill-current"
-                            viewBox="0 0 32 32"
-                          >
-                            <circle cx="16" cy="16" r="2" />
-                            <circle cx="10" cy="16" r="2" />
-                            <circle cx="22" cy="16" r="2" />
-                          </svg>
-                        </button>
-                      </div>
-                    </li>
-                    <li>
-                      <div className="flex justify-between">
-                        <div className="grow flex items-center">
-                          <div className="relative mr-3">
-                            <img
-                              className="w-8 h-8 rounded-full"
-                              src={UserImage05}
-                              width="32"
-                              height="32"
-                              alt="User 05"
-                            />
-                          </div>
-                          <div className="truncate">
-                            <span className="text-sm font-medium text-slate-800">
-                              Maria Martinez
-                            </span>
-                          </div>
-                        </div>
-                        <button className="text-slate-400 hover:text-slate-500 rounded-full">
-                          <span className="sr-only">Menu</span>
-                          <svg
-                            className="w-8 h-8 fill-current"
-                            viewBox="0 0 32 32"
-                          >
-                            <circle cx="16" cy="16" r="2" />
-                            <circle cx="10" cy="16" r="2" />
-                            <circle cx="22" cy="16" r="2" />
-                          </svg>
-                        </button>
-                      </div>
-                    </li>
-                    <li>
-                      <div className="flex justify-between">
-                        <div className="grow flex items-center">
-                          <div className="relative mr-3">
-                            <img
-                              className="w-8 h-8 rounded-full"
-                              src={UserImage05}
-                              width="32"
-                              height="32"
-                              alt="User 05"
-                            />
-                          </div>
-                          <div className="truncate">
-                            <span className="text-sm font-medium text-slate-800">
-                              Maria Martinez
-                            </span>
-                          </div>
-                        </div>
-                        <button className="text-slate-400 hover:text-slate-500 rounded-full">
-                          <span className="sr-only">Menu</span>
-                          <svg
-                            className="w-8 h-8 fill-current"
-                            viewBox="0 0 32 32"
-                          >
-                            <circle cx="16" cy="16" r="2" />
-                            <circle cx="10" cy="16" r="2" />
-                            <circle cx="22" cy="16" r="2" />
-                          </svg>
-                        </button>
-                      </div>
-                    </li>
-                    <li>
-                      <button className="w-full btn border-slate-200 hover:border-slate-300 text-indigo-500">
+                      <button
+                        className="w-full btn border-slate-200 hover:border-slate-300 text-indigo-500"
+                        onClick={() => {
+                          setMoreNum(500);
+                        }}
+                      >
                         View More
                       </button>
                     </li>
